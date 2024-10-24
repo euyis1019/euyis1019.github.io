@@ -12,8 +12,8 @@ title                    : "Your Name / Site Title"
 title_separator          : "-"
 name                     : &name "Yifu Guo(郭毅芙)"
 description              : &description "personal description"
-url                      : https://euyis1019.github.io/
-baseurl                  : "" # the subpath of your site, e.g. "/blog"
+url                      : https://euyis1019.github.io
+baseurl                  : ""
 repository               : "academicpages/academicpages.github.io"
 
 # Site Author - The following control what appear as part of the author content on the side bar.
