@@ -12,132 +12,103 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            color: #333;
+            line-height: 1.6;
         }
 
         .container {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
             text-align: center;
-            max-width: 600px;
+            max-width: 500px;
             width: 100%;
-            animation: fadeIn 0.8s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .profile-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 30px;
-            border: 5px solid #667eea;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .profile-image:hover {
-            transform: scale(1.05);
+            margin: 20px;
         }
 
         h1 {
-            font-size: 2.5em;
-            color: #333;
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .chinese-name {
-            font-size: 2em;
-            color: #667eea;
+            font-size: 1.4em;
+            color: #7f8c8d;
             margin-bottom: 30px;
         }
 
         .description {
-            color: #666;
+            color: #555;
             font-size: 1.1em;
-            line-height: 1.6;
             margin-bottom: 30px;
         }
 
-        .social-links {
+        .links {
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-top: 30px;
+            flex-wrap: wrap;
         }
 
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .link {
+            color: #3498db;
             text-decoration: none;
-            font-size: 1.5em;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 8px 16px;
+            border: 1px solid #3498db;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
-        .social-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        .link:hover {
+            background: #3498db;
+            color: white;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             .container {
-                padding: 40px 30px;
+                padding: 30px 20px;
             }
 
             h1 {
-                font-size: 2em;
+                font-size: 1.8em;
             }
 
             .chinese-name {
-                font-size: 1.5em;
+                font-size: 1.2em;
             }
 
-            .profile-image {
-                width: 150px;
-                height: 150px;
+            .links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .link {
+                width: 200px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="personimage.png" alt="郭毅芙" class="profile-image" onerror="this.src='images/personimage.png'">
         <h1>Yifu Guo</h1>
         <div class="chinese-name">郭毅芙</div>
         <div class="description">
-            Welcome to my personal website!<br>
-            欢迎来到我的个人网站！
+            Welcome to my personal website
         </div>
-        <div class="social-links">
-            <a href="mailto:contact@example.com" class="social-link" title="Email">✉</a>
-            <a href="https://github.com" class="social-link" title="GitHub">⚡</a>
+        <div class="links">
+            <a href="mailto:your-email@example.com" class="link">Email</a>
+            <a href="https://github.com/euyis1019" class="link">GitHub</a>
         </div>
     </div>
 </body>
 </html>
-
