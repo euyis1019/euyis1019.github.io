@@ -1,114 +1,374 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>郭毅芙 - Yifu Guo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f8f9fa;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            padding: 40px;
-            text-align: center;
-            max-width: 500px;
-            width: 100%;
-            margin: 20px;
-        }
-
-        h1 {
-            font-size: 2.2em;
-            color: #2c3e50;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .chinese-name {
-            font-size: 1.4em;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-        }
-
-        .description {
-            color: #555;
-            font-size: 1.1em;
-            margin-bottom: 30px;
-        }
-
-        .links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .link {
-            color: #3498db;
-            text-decoration: none;
-            padding: 8px 16px;
-            border: 1px solid #3498db;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .link:hover {
-            background: #3498db;
-            color: white;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 30px 20px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .chinese-name {
-                font-size: 1.2em;
-            }
-
-            .links {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .link {
-                width: 200px;
-            }
-        }
-    </style>
+    <title>Yifu Guo - AI Researcher</title>
+    <link rel="stylesheet" href="yifu_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Yifu Guo</h1>
-        <div class="chinese-name">郭毅芙</div>
-        <div class="description">
-            Welcome to my personal website
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Yifu Guo</a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#publications" class="nav-link">Publications</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#blog" class="nav-link">Blog</a></li>
+            </ul>
         </div>
-        <div class="links">
-            <a href="mailto:your-email@example.com" class="link">Email</a>
-            <a href="https://github.com/euyis1019" class="link">GitHub</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <img src="personimage.png" alt="Yifu Guo" class="hero-image">
+            <h1 class="hero-title">Yifu Guo</h1>
+            <p class="hero-subtitle">AI Researcher | Multimodal Learning & Agents</p>
+            <p class="hero-description">
+                Building intelligent systems that learn continuously and reason effectively
+            </p>
+            <div class="social-links">
+                <a href="https://github.com/euyis1019" target="_blank" class="social-link" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:1572189162@qq.com" class="social-link" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="https://scholar.google.com" target="_blank" class="social-link" aria-label="Google Scholar">
+                    <i class="fas fa-graduation-cap"></i>
+                </a>
+                <a href="#" target="_blank" class="social-link" aria-label="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <p class="about-text">
+                    I am a senior undergraduate student at <strong>South China Normal University</strong>, 
+                    majoring in Artificial Intelligence. My research focuses on <strong>Multimodal Learning</strong>, 
+                    <strong>Agents</strong>, and <strong>Continual Learning</strong>.
+                </p>
+                <p class="about-text">
+                    I have published papers at top-tier conferences including <strong>NeurIPS</strong>, 
+                    <strong>AAAI</strong>, and <strong>PRICAI</strong>. My work on <em>SE-Agent</em> 
+                    has gained <strong>192 GitHub stars</strong> and media coverage.
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">4.09</div>
+                        <div class="stat-label">GPA</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">4/89</div>
+                        <div class="stat-label">Rank</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">7+</div>
+                        <div class="stat-label">Publications</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">192</div>
+                        <div class="stat-label">GitHub Stars</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Publications</h2>
+            
+            <!-- Publication Card 1 -->
+            <div class="publication-card">
+                <div class="pub-header">
+                    <span class="pub-badge pub-badge-aaai">AAAI 2026</span>
+                    <span class="pub-type">Poster</span>
+                </div>
+                <h3 class="pub-title">Decoupling Continual Semantic Segmentation</h3>
+                <p class="pub-authors"><strong>First Author</strong></p>
+                <p class="pub-abstract">
+                    Proposed DecoupleCSS that addresses catastrophic forgetting and background shift 
+                    by decoupling class-aware detection from class-agnostic segmentation. 
+                    Achieved SOTA with 12.12% and 17.99% mIoU improvements.
+                </p>
+                <div class="pub-links">
+                    <a href="https://arxiv.org/pdf/2508.05065" target="_blank" class="pub-link">
+                        <i class="fas fa-file-pdf"></i> arXiv
+                    </a>
+                </div>
+            </div>
+
+            <!-- Publication Card 2 -->
+            <div class="publication-card">
+                <div class="pub-header">
+                    <span class="pub-badge pub-badge-neurips">NeurIPS 2025</span>
+                    <span class="pub-type">Poster</span>
+                </div>
+                <h3 class="pub-title">SE-Agent: Self-Evolution Trajectory Optimization in Multi-Step Reasoning</h3>
+                <p class="pub-authors"><strong>First Author</strong> | <i class="fab fa-github"></i> 192 Stars | <i class="fas fa-newspaper"></i> Media Report</p>
+                <p class="pub-abstract">
+                    Proposed EvolveAgent, a trajectory-level iterative optimization framework. 
+                    Significantly expanded solution space through crossover and mutation, 
+                    improving baseline from 28% to 58% on SWE-Bench.
+                </p>
+                <div class="pub-links">
+                    <a href="https://openreview.net/pdf/814cd78232da3150c1f91b29920f4f2e4d70fb3c.pdf" target="_blank" class="pub-link">
+                        <i class="fas fa-file-pdf"></i> Paper
+                    </a>
+                    <a href="https://github.com/JARVIS-Xs/SE-Agent" target="_blank" class="pub-link">
+                        <i class="fab fa-github"></i> Code
+                    </a>
+                    <a href="https://mp.weixin.qq.com/s/hbvRxR3M95d2XlEb7drHgQ" target="_blank" class="pub-link">
+                        <i class="fas fa-newspaper"></i> Media
+                    </a>
+                </div>
+            </div>
+
+            <!-- Publication Card 3 -->
+            <div class="publication-card">
+                <div class="pub-header">
+                    <span class="pub-badge pub-badge-aaai">AAAI 2026</span>
+                    <span class="pub-type">Oral</span>
+                </div>
+                <h3 class="pub-title">VideoSeg-R1: Reasoning Video Object Segmentation via Reinforcement Learning</h3>
+                <p class="pub-authors"><strong>Co-first Author</strong></p>
+                <p class="pub-abstract">
+                    First work introducing reinforcement learning into VOS. Combines hierarchical 
+                    frame sampling and multimodal reasoning with SAM2 and XMem for improved segmentation.
+                </p>
+                <div class="pub-links">
+                    <a href="https://ajuazu5d.esaps.net/AAAI_VideoSeg_R1.pdf" target="_blank" class="pub-link">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Publication Card 4 -->
+            <div class="publication-card">
+                <div class="pub-header">
+                    <span class="pub-badge pub-badge-under-review">Under Review</span>
+                    <span class="pub-type">ICLR</span>
+                </div>
+                <h3 class="pub-title">CogCaS: Cognitive Cascade Segmentation in Continual Semantic Segmentation</h3>
+                <p class="pub-authors"><strong>Co-first Author</strong></p>
+                <p class="pub-abstract">
+                    Systematically analyzes existing CISS paradigms and proposes a new modeling 
+                    method that effectively solves class-incremental semantic segmentation problems.
+                </p>
+                <div class="pub-links">
+                    <a href="https://ajuazu5d.esaps.net/Nips_CogCas_CISS.pdf" target="_blank" class="pub-link">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Publication Card 5 -->
+            <div class="publication-card">
+                <div class="pub-header">
+                    <span class="pub-badge pub-badge-under-review">Under Review</span>
+                    <span class="pub-type">ICLR</span>
+                </div>
+                <h3 class="pub-title">SkillEvo: An Experience Learning Framework with RL for Skill Evolution</h3>
+                <p class="pub-authors"><strong>Second Author</strong></p>
+                <p class="pub-abstract">
+                    Addresses sparse rewards and weak generalization in long-horizon tasks through 
+                    a two-stage framework that evolves trajectories into reusable skills.
+                </p>
+                <div class="pub-links">
+                    <a href="https://ajuazu5d.esaps.net/Nips_SkillEvo.pdf" target="_blank" class="pub-link">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Publication Card 6 -->
+            <div class="publication-card">
+                <div class="pub-header">
+                    <span class="pub-badge pub-badge-pricai">PRICAI 2024</span>
+                    <span class="pub-type">Conference</span>
+                </div>
+                <h3 class="pub-title">S2A-Attention for Multimodal 3D Semantic Segmentation</h3>
+                <p class="pub-authors"><strong>Co-first Author</strong></p>
+                <p class="pub-abstract">
+                    Lightweight multimodal 3D segmentation framework with Agent attention mechanism. 
+                    Reduces inference latency to 20% while maintaining SOTA accuracy on nuScenes and KITTI.
+                </p>
+                <div class="pub-links">
+                    <a href="https://ajuazu5d.esaps.net/Pricai_PointCloud.pdf" target="_blank" class="pub-link">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Publication Card 7 -->
+            <div class="publication-card">
+                <div class="pub-header">
+                    <span class="pub-badge pub-badge-neurips">NeurIPS 2025</span>
+                    <span class="pub-type">Spotlight</span>
+                </div>
+                <h3 class="pub-title">RepoMaster: Autonomous Exploration and Understanding of GitHub Repositories</h3>
+                <p class="pub-authors">Baseline Reproduction and Idea Discussion</p>
+                <div class="pub-links">
+                    <a href="https://arxiv.org/pdf/2505.21577" target="_blank" class="pub-link">
+                        <i class="fas fa-file-pdf"></i> arXiv
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title">Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-spray-can"></i>
+                    </div>
+                    <h3 class="project-title">Personalized Fragrance Recommendation</h3>
+                    <p class="project-description">
+                        A recommendation system for personalized fragrance suggestions based on user preferences.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://github.com/euyis1019/fragrance-recommendation-dataset" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="project-title">GDSCIID Official Website</h3>
+                    <p class="project-description">
+                        Full-stack development of the official website for GDSCIID.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://gicoad.gdut.edu.cn/p" target="_blank" class="project-link">
+                            <i class="fas fa-external-link-alt"></i> Website
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Experience</h2>
+            
+            <div class="experience-timeline">
+                <div class="experience-item">
+                    <div class="experience-date">2025.10 - Present</div>
+                    <div class="experience-content">
+                        <h3 class="experience-title">Research Intern</h3>
+                        <h4 class="experience-company">
+                            <a href="https://www.deepwisdom.ai/" target="_blank">DeepWisdom (MetaGPT)</a>
+                        </h4>
+                        <p class="experience-description">
+                            Working on AI agents and multi-agent systems.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-date">2025.3 - 2025.6</div>
+                    <div class="experience-content">
+                        <h3 class="experience-title">Research Intern</h3>
+                        <h4 class="experience-company">
+                            <a href="https://www.stepfun.com/company" target="_blank">StepFun (阶跃星辰)</a>
+                        </h4>
+                        <p class="experience-description">
+                            Worked on large language models and multimodal AI systems.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-date">2022 - 2026</div>
+                    <div class="experience-content">
+                        <h3 class="experience-title">B.S. in Artificial Intelligence</h3>
+                        <h4 class="experience-company">South China Normal University</h4>
+                        <p class="experience-description">
+                            GPA: 4.09/5.0, Rank: 4/89<br>
+                            Institute of Data Science and Artificial Intelligence
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="section">
+        <div class="container">
+            <h2 class="section-title">Blog</h2>
+            <p class="section-subtitle">Coming soon... Stay tuned for insights on AI research, paper reviews, and technical tutorials.</p>
+            
+            <!-- Placeholder for future blog posts -->
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="blog-date">2025-01-15</div>
+                    <h3 class="blog-title">Understanding Continual Learning in Deep Neural Networks</h3>
+                    <p class="blog-excerpt">
+                        An introduction to continual learning and catastrophic forgetting...
+                    </p>
+                    <a href="#" class="blog-link">Read more →</a>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-date">2025-01-08</div>
+                    <h3 class="blog-title">Building AI Agents: From ReAct to Self-Evolution</h3>
+                    <p class="blog-excerpt">
+                        Exploring the evolution of AI agent architectures...
+                    </p>
+                    <a href="#" class="blog-link">Read more →</a>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-date">2024-12-20</div>
+                    <h3 class="blog-title">My Journey to NeurIPS: Lessons Learned</h3>
+                    <p class="blog-excerpt">
+                        Reflections on the research process and collaboration...
+                    </p>
+                    <a href="#" class="blog-link">Read more →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Yifu Guo. All rights reserved.</p>
+            <p class="footer-links">
+                <a href="https://github.com/euyis1019" target="_blank">GitHub</a> · 
+                <a href="mailto:1572189162@qq.com">Email</a> · 
+                <a href="#">CV</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="yifu_script.js"></script>
 </body>
 </html>
+
