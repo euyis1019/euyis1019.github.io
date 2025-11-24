@@ -145,44 +145,52 @@ body {
 }
 
 /* ============================================
-   Hero Section
+   Main Section
    ============================================ */
-.hero {
-    position: relative;
-    min-height: 60vh;
+.main-section {
+    margin-top: 80px;
+    padding-top: var(--spacing-2xl);
+}
+
+.container-simple {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.profile-header {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 50%, #c2e9fb 100%);
-    background-size: cover;
-    background-position: center;
-    margin-top: 60px;
-    overflow: hidden;
+    gap: var(--spacing-xl);
+    align-items: flex-start;
+    margin-bottom: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+    border-bottom: 1px solid var(--border-color);
 }
 
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.15);
+.profile-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 20px var(--shadow);
+    flex-shrink: 0;
 }
 
-.hero-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    color: #2c3e50;
-    padding: 2rem;
+.profile-info {
+    flex: 1;
 }
 
-.hero-title {
-    font-size: 3rem;
+.profile-name {
+    font-size: 2.5rem;
     font-weight: 700;
-    font-style: italic;
-    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
-    font-family: 'Courier New', monospace;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.profile-affiliation {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
 }
 
 /* ============================================
@@ -217,48 +225,24 @@ body {
 }
 
 /* ============================================
-   About Section
+   Social Links
    ============================================ */
-.about-layout {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: var(--spacing-xl);
-    align-items: start;
-}
-
-.about-image-wrapper {
-    position: sticky;
-    top: 100px;
-}
-
-.about-image {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px var(--shadow);
-    margin-bottom: var(--spacing-md);
-}
-
 .social-links {
     display: flex;
-    gap: 0.75rem;
-    justify-content: center;
+    gap: var(--spacing-md);
     flex-wrap: wrap;
 }
 
 .social-link {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--bg-card);
-    border: 2px solid var(--border-color);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
     color: var(--text-primary);
-    font-size: 1.2rem;
+    font-size: 0.95rem;
     text-decoration: none;
     transition: all 0.3s ease;
 }
@@ -267,61 +251,23 @@ body {
     background: var(--accent-color);
     color: white;
     border-color: var(--accent-color);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 }
 
-.about-content {
-    flex: 1;
+.social-link i {
+    font-size: 1.1rem;
 }
 
-.about-title {
-    font-size: 2.5rem;
+/* ============================================
+   Publications Section
+   ============================================ */
+.publications-title {
+    font-size: 2rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: var(--spacing-lg);
-}
-
-.about-text {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-secondary);
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-xl);
-}
-
-.stat-card {
-    background: var(--bg-card);
-    padding: var(--spacing-md);
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px var(--shadow-hover);
-    border-color: var(--accent-color);
-}
-
-.stat-number {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--accent-color);
-    margin-bottom: 0.25rem;
-}
-
-.stat-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--border-color);
 }
 
 /* ============================================
@@ -329,18 +275,15 @@ body {
    ============================================ */
 .publication-card {
     background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
+    border-left: 3px solid var(--border-color);
+    padding: var(--spacing-md) var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px var(--shadow);
 }
 
 .publication-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px var(--shadow-hover);
-    border-color: var(--accent-color);
+    border-left-color: var(--accent-color);
+    background: var(--bg-secondary);
 }
 
 .pub-header {
@@ -668,41 +611,32 @@ body {
 /* ============================================
    Responsive Design
    ============================================ */
-@media (max-width: 968px) {
-    .about-layout {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
-    }
-    
-    .about-image-wrapper {
-        position: relative;
-        top: 0;
-        max-width: 300px;
-        margin: 0 auto;
-    }
-}
-
 @media (max-width: 768px) {
-    .hero-title {
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .profile-image {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .profile-name {
         font-size: 2rem;
     }
     
-    .nav-menu {
-        gap: 1rem;
-        font-size: 0.9rem;
+    .social-links {
+        justify-content: center;
     }
     
-    .about-title {
-        font-size: 2rem;
+    .publications-title {
+        font-size: 1.5rem;
     }
     
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .projects-grid,
-    .blog-grid {
-        grid-template-columns: 1fr;
+    .pub-title {
+        font-size: 1.1rem;
     }
 }
 
@@ -711,33 +645,26 @@ body {
         padding: 1rem;
     }
     
-    .nav-menu {
-        gap: 0.75rem;
-        font-size: 0.85rem;
+    .profile-image {
+        width: 120px;
+        height: 120px;
     }
     
-    .hero {
-        min-height: 40vh;
-    }
-    
-    .hero-title {
-        font-size: 1.5rem;
-    }
-    
-    .about-image-wrapper {
-        max-width: 250px;
+    .profile-name {
+        font-size: 1.75rem;
     }
     
     .section {
         padding: var(--spacing-lg) var(--spacing-sm);
     }
     
-    .stat-card {
-        padding: var(--spacing-sm);
+    .publication-card {
+        padding: var(--spacing-sm) var(--spacing-md);
     }
     
-    .stat-number {
-        font-size: 1.5rem;
+    .social-link {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
     }
 }
 
