@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal website of [Your Name] - AI Researcher">
+    <title>Your Name - AI Researcher</title>
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === CSS Variables === */
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f8f9fa;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --accent-color: #1a73e8;
+            --border-color: #dadce0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+            --max-width: 1200px;
+            --spacing-unit: 8px;
+        }
+
+        /* === Reset === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--primary-bg);
+        }
+
+        /* === Navigation === */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--primary-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-sm);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .nav-logo img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* === Hero Section === */
+        .hero {
+            margin-top: 72px; /* Height of navbar */
+            width: 100%;
+            height: 400px;
+            background: 
+                linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920') center/cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .social-icons img {
+            width: 24px;
+            height: 24px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* === Main Content === */
+        main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        /* === About Section === */
+        .about-content {
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .about-content p {
+            margin-bottom: 1rem;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 0.25rem;
+        }
+
+        /* === Education Cards === */
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .education-card {
+            background: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .education-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .education-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .education-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .education-card .degree {
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .education-card .date {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* === Research Interest === */
+        .interest-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .interest-list li {
+            background: var(--secondary-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        /* === Experience Timeline === */
+        .experience-timeline {
+            margin-top: 2rem;
+        }
+
+        .experience-item {
+            background: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .experience-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .experience-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .company-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .experience-info {
+            flex: 1;
+        }
+
+        .position-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .company-name {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .date-location {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-section {
+            margin-top: 1rem;
+        }
+
+        .project-section h4 {
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .project-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .project-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .project-list li:before {
+            content: "▪";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* === Footer === */
+        footer {
+            background: var(--secondary-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        /* === Responsive Design === */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-bg);
+                flex-direction: column;
+                padding: 1rem;
+                border-top: 1px solid var(--border-color);
+                box-shadow: var(--shadow-md);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+                margin-left: auto;
+            }
+
+            .hero {
+                height: 300px;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .experience-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .company-logo {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .education-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <img src="profile-small.jpg" alt="Logo">
+                Your Name
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <span class="material-icons">menu</span>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#about">About</a>
+                <a href="#education">Education</a>
+                <a href="#research">Research</a>
+                <a href="#experience">Experience</a>
+                <a href="/cv.pdf">CV</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Come and Build a Silicon Dream with Me</h1>
+        <div class="social-icons">
+            <a href="https://linkedin.com/in/yourprofile" target="_blank" title="LinkedIn">
+                <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+            </a>
+            <a href="https://github.com/yourusername" target="_blank" title="GitHub">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub">
+            </a>
+            <a href="mailto:your.email@example.com" title="Email">
+                <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email">
+            </a>
+            <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank" title="Google Scholar">
+                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Scholar">
+            </a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- About Section -->
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <p><span class="emoji">👋</span> Hi, I'm Your Name (Chinese Name), currently serving as [Your Position] at [Your Company/Institution].</p>
+                
+                <p>Prior to this, I worked as [Previous Position] at [Previous Company], where I participated in and led [Your Achievements]. I specialize in [Your Specialization] and contribute to [Your Contributions].</p>
+                
+                <p><span class="emoji">🦾</span> In parallel with industry development, I am progressively delving deeper into academic research, conducting studies in [Research Areas]. My vision is to [Your Vision and Goals].</p>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education">
+            <h2>Education</h2>
+            <div class="education-grid">
+                <div class="education-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/University_of_Washington_Block_W_logo_RGB_brand_colors.SVG" alt="University Logo">
+                    <h3>University Name</h3>
+                    <p class="degree">PhD in Computer Science</p>
+                    <p class="date">Sep 2026 - Present</p>
+                </div>
+                
+                <div class="education-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/MIT_logo.svg" alt="University Logo">
+                    <h3>University Name</h3>
+                    <p class="degree">MS in Computer Science</p>
+                    <p class="date">Sep 2022 - Dec 2023</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Interest Section -->
+        <section id="research">
+            <h2>Research Interest</h2>
+            <ul class="interest-list">
+                <li>Multi-Agent Systems (MAS)</li>
+                <li>Agentic LLM Architectures</li>
+                <li>Learning and Memory System</li>
+                <li>Reinforcement Learning and Reward Design</li>
+            </ul>
+        </section>
+
+        <!-- Professional Experience Section -->
+        <section id="experience">
+            <h2>Professional Experience</h2>
+            <div class="experience-timeline">
+                <!-- Experience Item 1 -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" 
+                             alt="Company Logo" 
+                             class="company-logo">
+                        <div class="experience-info">
+                            <h3 class="position-title">VP of Research, Tech Lead</h3>
+                            <p class="company-name">Company Name, Location</p>
+                            <p class="date-location">Sep 2025 – Present</p>
+                        </div>
+                    </div>
+                    <div class="project-section">
+                        <h4>Key Projects:</h4>
+                        <ul class="project-list">
+                            <li>Led R&D team to tackle research on agent learning and memory systems</li>
+                            <li>Developed multi-agent collaboration frameworks for complex task solving</li>
+                            <li>Published 5+ papers at top-tier conferences including NeurIPS and ICLR</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" 
+                             alt="Company Logo" 
+                             class="company-logo">
+                        <div class="experience-info">
+                            <h3 class="position-title">Research Engineer</h3>
+                            <p class="company-name">Company Name, Location</p>
+                            <p class="date-location">Jul 2024 – Aug 2025</p>
+                        </div>
+                    </div>
+                    <div class="project-section">
+                        <h4>Claude Series Models & Infrastructure:</h4>
+                        <ul class="project-list">
+                            <li>Core development of model training infrastructure, handling 1.4 trillion tokens</li>
+                            <li>Designed multimodal tokenization system, reducing visual token count by 32%</li>
+                            <li>Built compliant RLHF data pipeline supporting 50K daily samples</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Experience Item 3 -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" 
+                             alt="Company Logo" 
+                             class="company-logo">
+                        <div class="experience-info">
+                            <h3 class="position-title">Machine Learning Engineer</h3>
+                            <p class="company-name">Company Name, Location</p>
+                            <p class="date-location">Mar 2023 – Sep 2023</p>
+                        </div>
+                    </div>
+                    <div class="project-section">
+                        <h4>LLM Infrastructure Projects:</h4>
+                        <ul class="project-list">
+                            <li>Led vocabulary unification across text, code, and multimodal inputs</li>
+                            <li>Implemented content security filtering, blocking 2.1M harmful samples</li>
+                            <li>Streamlined API integration for 400+ enterprise clients</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Your Name. All rights reserved.</p>
+        <p>Built with passion for AI and machine learning.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('nav');
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (!nav.contains(event.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal academic website">
+    <title>Your Name - AI Researcher</title>
+    <style>
+        /* === Reset & Base Styles === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --max-width: 900px;
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --text-secondary: #666666;
+            --link-color: #0066cc;
+            --link-hover: #004499;
+            --border-color: #e5e5e5;
+            --spacing-unit: 8px;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === Navigation === */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+            z-index: 1000;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        nav .nav-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 4);
+        }
+
+        nav .logo {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: calc(var(--spacing-unit) * 3);
+            margin-left: auto;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-weight: 400;
+        }
+
+        nav a:hover {
+            color: var(--link-color);
+        }
+
+        /* === Main Container === */
+        main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 3);
+        }
+
+        /* === Header/Hero Section === */
+        header {
+            text-align: center;
+            margin-bottom: calc(var(--spacing-unit) * 8);
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: calc(var(--spacing-unit) * 2);
+            letter-spacing: -0.02em;
+        }
+
+        .bio {
+            max-width: 600px;
+            margin: calc(var(--spacing-unit) * 3) auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+
+        .bio p {
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        /* === Social Links === */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: calc(var(--spacing-unit) * 2);
+            margin-top: calc(var(--spacing-unit) * 4);
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .social-links span {
+            color: var(--text-secondary);
+        }
+
+        /* === Sections === */
+        section {
+            margin: calc(var(--spacing-unit) * 8) 0;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            padding-bottom: calc(var(--spacing-unit) * 2);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        /* === Publication/Talk Tables === */
+        .publications-table,
+        .talks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: calc(var(--spacing-unit) * 3);
+        }
+
+        .publications-table td,
+        .talks-table td {
+            padding: calc(var(--spacing-unit) * 2) 0;
+            vertical-align: top;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .publications-table tr:last-child td,
+        .talks-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Date column */
+        .publications-table td:first-child,
+        .talks-table td:first-child {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            padding-right: calc(var(--spacing-unit) * 3);
+            width: 100px;
+            font-weight: 500;
+        }
+
+        /* Content column */
+        .publications-table td:last-child,
+        .talks-table td:last-child {
+            width: 100%;
+        }
+
+        .publications-table a,
+        .talks-table a {
+            color: var(--link-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .publications-table a:hover,
+        .talks-table a:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
+        }
+
+        .publication-links,
+        .talk-links {
+            display: inline-flex;
+            gap: calc(var(--spacing-unit) * 2);
+            margin-left: calc(var(--spacing-unit));
+        }
+
+        .publication-links a,
+        .talk-links a {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* === Responsive Design === */
+        @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+
+            nav .nav-container {
+                flex-direction: column;
+                gap: calc(var(--spacing-unit) * 2);
+            }
+
+            nav .nav-links {
+                margin-left: 0;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .profile-img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .publications-table,
+            .talks-table {
+                display: block;
+            }
+
+            .publications-table tr,
+            .talks-table tr {
+                display: block;
+                margin-bottom: calc(var(--spacing-unit) * 3);
+            }
+
+            .publications-table td,
+            .talks-table td {
+                display: block;
+                padding: 0;
+                border: none;
+            }
+
+            .publications-table td:first-child,
+            .talks-table td:first-child {
+                margin-bottom: calc(var(--spacing-unit));
+                width: 100%;
+            }
+        }
+
+        /* === Footer === */
+        footer {
+            max-width: var(--max-width);
+            margin: calc(var(--spacing-unit) * 10) auto calc(var(--spacing-unit) * 4);
+            padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">Your Name</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/papers">Papers</a>
+                <a href="/blog">Blog</a>
+                <a href="/thoughts">Thoughts</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Header/Hero -->
+        <header>
+            <img src="profile.jpg" alt="Your Name" class="profile-img">
+            <h1>Your Name</h1>
+            <div class="bio">
+                <p>I am an AI researcher working on computer vision and machine learning.</p>
+                <p>I currently work at [Your Institution/Company].</p>
+                <p>My research focuses on continual learning, semantic segmentation, and AI agents. I have published at top-tier conferences including NeurIPS, ICLR, and AAAI.</p>
+            </div>
+            <div class="social-links">
+                <a href="https://twitter.com/yourhandle">Twitter</a>
+                <span>/</span>
+                <a href="/cv.pdf">CV</a>
+                <span>/</span>
+                <a href="https://scholar.google.com/citations?user=YOUR_ID">Google Scholar</a>
+                <span>/</span>
+                <a href="mailto:your.email@example.com">Email</a>
+            </div>
+        </header>
+
+        <!-- Publications Section -->
+        <section id="papers">
+            <h2>Papers</h2>
+            <table class="publications-table">
+                <tr>
+                    <td>2025 Apr</td>
+                    <td>
+                        <a href="#">Your paper title goes here</a>
+                        <span class="publication-links">
+                            <a href="#">(blog)</a>
+                            <a href="#">(code)</a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2024 Oct</td>
+                    <td>
+                        <a href="#">Another paper title with interesting findings</a>
+                        <span class="publication-links">
+                            <a href="#">(paper)</a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2024 Jun</td>
+                    <td>
+                        <a href="#">Research on continual learning for semantic segmentation</a>
+                        <span class="publication-links">
+                            <a href="#">(blog)</a>
+                            <a href="#">(code)</a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2023 Dec</td>
+                    <td>
+                        <a href="#">Deep learning methods for video analysis</a>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Talks & Media Section -->
+        <section id="talks">
+            <h2>Talks & Media</h2>
+            <table class="talks-table">
+                <tr>
+                    <td>2025 Mar</td>
+                    <td>
+                        Keynote, AI Conference 2025
+                        <span class="talk-links">
+                            <a href="#">(video)</a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2025 Feb</td>
+                    <td>Guest lecture, Stanford CS230</td>
+                </tr>
+                <tr>
+                    <td>2024 Nov</td>
+                    <td>
+                        Talk, NeurIPS 2024
+                        <span class="talk-links">
+                            <a href="#">(slides)</a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2024 Sep</td>
+                    <td>Seminar, University Research Group</td>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Your Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>

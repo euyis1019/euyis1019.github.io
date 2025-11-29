@@ -1,0 +1,239 @@
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+% \usepackage[english]{babel}
+\usepackage{tabularx}
+% \input{glyphtounicode}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+% \usepackage[pdftex]{hyperref}
+\usepackage{fancyhdr}
+% --- 中文与中英混排支持 ---
+\usepackage{xeCJK} % 中文宏包
+\setCJKmainfont{Noto Serif CJK SC} % 设置中文字体，可改为：SimHei, KaiTi, 思源宋体等
+\setmainfont{Times New Roman} % 设置英文字体
+% \xeCJKsetup{CJKglue=\hskip 0.2em plus 0.1em} % 中英文间距优化
+% \usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\usepackage{color}
+\definecolor{darkred}{rgb}{0.5,0,0}
+% Sections formatting
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+% \pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\begin{center}
+    \textbf{\Huge \scshape Yifu Guo}
+\end{center}
+
+\begin{center}
+    
+\small +86 17276538496 $|$
+\href{mailto:1572189162@qq.com}{\underline{1572189162@qq.com}} $|$
+\href{https://github.com/euyis1019}{\underline{github.com/euyis1019}} \\
+
+\textit{Research Interests: Multimodal Learning, Agents, Continual Learning}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{\textcolor{darkred}{Education}}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {South China Normal University}  
+      {\textbf{GPA 4.09, Rank 4/89}}{Institute of Data Science and Artificial Intelligence, Artificial Intelligence}{Sept. 2022 -- Jun 2026}
+  \resumeSubHeadingListEnd
+
+
+%-----------Experience-----------
+\section{\textcolor{darkred}{Papers}}
+\resumeSubHeadingListStart
+\resumeSubheading
+    {Decoupling Continual Semantic Segmentation}{\href{https://arxiv.org/pdf/2508.05065}{[\color{blue}{Arxiv}]}}
+    {First Author}{\textcolor{purple}{\textbf{Published} at AAAI 2026(Poster)}}
+    \resumeItemListStart
+      \resumeItem{\textbf{Abstract}: Proposed a continual semantic segmentation framework DecoupleCSS that effectively addresses catastrophic forgetting and background shift problems by decoupling class-aware detection from class-agnostic segmentation. Achieved SOTA performance with 12.12\% and 17.99\% mIoU improvements over existing best methods in challenging settings.}
+    \resumeItemListEnd
+
+\resumeSubheading
+    {CogCaS: Cognitive Cascade Segmentation in Continual Semantic Segmentation}{\href{https://ajuazu5d.esaps.net/Nips_CogCas_CISS.pdf}{[\color{blue}PDF]}}
+    {Co-first Author}{Under Review at ICLR}
+    \resumeItemListStart
+      \resumeItem{\textbf{Abstract}: Existing modeling paradigms for class-incremental semantic segmentation can be summarized as: 1. pixel-level multi-class classification, and 2. pixel-level multi-label classification. This paper systematically analyzes the defects of both approaches and proposes a new modeling method that effectively solves CISS problems.}
+    \resumeItemListEnd
+    
+\resumeSubheading
+   {SE-Agent: Self-Evolution Trajectory Optimization in Multi-Step Reasoning}
+   {\href{https://openreview.net/pdf/814cd78232da3150c1f91b29920f4f2e4d70fb3c.pdf}{[\textcolor{blue}{Arxiv}]} 
+   \href{https://github.com/JARVIS-Xs/SE-Agent}{\textcolor{blue}{[Code]}}}
+    {First Author\qquad\href{https://mp.weixin.qq.com/s/hbvRxR3M95d2XlEb7drHgQ}{[\textcolor{blue!50!red}{Media Report}]}\quad \textcolor{blue!50!orange}{[GitHub Stars: 192]}}
+    {\textcolor{purple}{\textbf{Published} at NeurIPS(Poster)}}
+    \resumeItemListStart
+      \resumeItem{Proposed \textbf{EvolveAgent}, a trajectory-level iterative optimization framework that addresses agent consistency issues and limited solution space; the method can be seamlessly integrated into paradigms such as ReAct.}
+      \resumeItem{Significantly expanded the solution space through trajectory crossover and mutation operations, improving baseline performance from 28\% to 58\% on SWE-Bench.}
+    \resumeItemListEnd
+
+\resumeSubheading
+    {VideoSeg-R1: Reasoning Video Object Segmentation via Reinforcement Learning}{\href{https://ajuazu5d.esaps.net/AAAI_VideoSeg_R1.pdf}{[\color{blue}PDF]}}
+    {Co-first Author}{\textcolor{purple}{\textbf{Published} at AAAI 2026(Oral)}}
+    \resumeItemListStart
+      \resumeItem{\textbf{Overview}: Proposed VideoSeg-R1, which models the task as a joint problem of referring image segmentation and video mask propagation. First introduced reinforcement learning into VOS, significantly improving segmentation performance through hierarchical frame sampling and multimodal large model reasoning, combined with SAM2 and XMem models for segmentation and object tracking.}
+    \resumeItemListEnd
+
+\resumeSubheading
+    {SkillEvo: An Experience Learning Framework with RL for Skill Evolution}{\href{https://ajuazu5d.esaps.net/Nips_SkillEvo.pdf}{[\color{blue}PDF]}}
+    {Second Author}{Under Review at ICLR}
+    \resumeItemListStart
+      \resumeItem{\textbf{Abstract}: Existing large models face challenges of sparse rewards, inefficient training, and weak generalization in long-horizon tasks, especially the overly coarse credit assignment in methods like GRPO. To address this, SkillEvo proposes a two-stage framework: the first stage improves efficiency and stability through refined rewards and task filtering; the second stage evolves trajectories into reusable skills and organizes them dynamically, achieving skill reuse and long-term adaptability.}
+    \resumeItemListEnd
+
+    % \resumeSubheading
+    %  {SenseDesign: A Design Work Dataset with Binary Polarity Descriptors}{\href{https://ajuazu5d.esaps.net/2025ICME_VLLM_Aesthetic.pdf}{[\color{blue}PDF]}}
+    %  {Co-first Author}{To be Submitted}
+    %  \resumeItemListStart
+    %    \resumeItem{\textbf{Abstract}: Constructed a dataset and evaluation framework for assessing Vision-Language Large Models' (VLLMs) ability to perceive design aesthetic features, using binary polarity semantic labels covering a wide range of design semantic dimensions. Used to verify whether multimodal large models can establish connections between fine-grained visual features and abstract semantic relationships.}
+    %  \resumeItemListEnd
+
+\resumeSubheading
+    {S2A-Attention for Multimodal 3D Semantic Segmentation}{\href{https://ajuazu5d.esaps.net/Pricai_PointCloud.pdf}{[\color{blue}PDF]}}
+    {Co-first Author}{{\textbf{Published} at PRICAI 2024}}
+    \resumeItemListStart
+      \resumeItem{\textbf{Abstract}: Proposed a lightweight multimodal 3D semantic segmentation framework that introduces Agent attention mechanism and mid-level feature fusion strategy, reducing inference latency to 20\% of the original while maintaining SOTA accuracy, empirically validated on nuScenes and KITTI benchmark datasets.}
+    \resumeItemListEnd
+
+\resumeSubheading
+    {RepoMaster: Autonomous Exploration and Understanding of GitHub Repositories}{\href{https://arxiv.org/pdf/2505.21577}{[\color{blue}Arxiv]}}
+    {Baseline Reproduction and Idea Discussion}{\textcolor{purple}{\textbf{Published} at NeurIPS(Spotlight)}}
+
+\resumeSubHeadingListEnd
+%-----------Extracurriculars-----------
+\section{\textcolor{darkred}{Projects}}
+\begin{itemize}
+  
+  \item Personalized Fragrance Recommendation \hfill [\href{https://github.com/euyis1019/fragrance-recommendation-dataset}{\color{blue}Link}]
+  
+  \item GDSCIID Official Website -- Full-Stack Development \hfill [\href{https://gicoad.gdut.edu.cn/p}{\color{blue}GDSCIID Website}]
+
+
+% \item Vibe Drawing for Data Visualization\hfill [\href{https://github.com/euyis1019/Vibe-Visualization}{\color{blue}Link}]
+\item Internship: \href{https://www.stepfun.com/company}{\color{blue}StepFun/阶跃星辰}\hfill [2025.3 - 2025.6]
+\item Internship: \href{https://www.deepwisdom.ai/}{\color{blue}DeepWisdom (MetaGPT)}\hfill [2025.10 - ]
+\end{itemize}
+
+
+
+
+%-----------Skill and Interests-----------
+% \section{\textcolor{darkred}{Personal Summary}}
+
+% \begin{itemize}[leftmargin=*, itemsep=5pt, parsep=0pt]
+%     % 你可以根据需要调整 itemsep / parsep 等参数
+
+%     \item \textbf{Personal Statement:} Cheerful and collaborative, with a natural ability to foster win-win relationships 
+%     through effective communication and mutual respect. Passionate about every innovative technology 
+%     that drives real-world impact and scientific advancement. Demonstrates resilience and enthusiasm in tackling challenging research problems.
+
+%     \item \textbf{Languages:} Chinese (native), English (IELTS 6.5)
+
+%     \item \textbf{Interested Areas:} Embodied AI, Spatial Intelligence, Multi-modal, and every 
+%     \textit{fancy yet highly practical (widely applicable) domain and technology}.
+
+%     \item \textbf{Hobbies:} Basketball, Trombone, EDM, Bouldering, Running, Swimming, Badminton, OW, LOL.
+% \end{itemize}
+
+
+
+
+
+\end{document}
