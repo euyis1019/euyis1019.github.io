@@ -329,15 +329,7 @@ body {
     color: white;
 }
 
-.pub-badge-ecai {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    color: white;
-}
 
-.pub-badge-smc {
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    color: white;
-}
 
 .pub-type {
     color: var(--text-secondary);

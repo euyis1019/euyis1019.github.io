@@ -5,7 +5,7 @@
 Source: [Google Scholar profile (FqmgR7wAAAAJ)](https://scholar.google.com/citations?user=FqmgR7wAAAAJ&hl=zh-CN)
 Cross-referenced with: [DBLP (Yifu Guo)](https://dblp.org/pid/139/7856.html)
 
-### Added 6 new publications
+### Added 4 new publications
 
 | # | Title | Venue | Role | arXiv |
 |---|-------|-------|------|-------|
@@ -13,8 +13,6 @@ Cross-referenced with: [DBLP (Yifu Guo)](https://dblp.org/pid/139/7856.html)
 | 2 | ToolACE-MCP: Generalizing History-Aware Routing from MCP Tools to the Agent Web | Preprint 2026 | Contributing Author | [2601.08276](https://arxiv.org/abs/2601.08276) |
 | 3 | RepoShapley: Shapley-Enhanced Context Filtering for Repository-Level Code Completion | Preprint 2026 | Contributing Author | [2601.03378](https://arxiv.org/abs/2601.03378) |
 | 4 | RealMem: Benchmarking LLMs in Real-World Memory-Driven Interaction | Preprint 2026 | Contributing Author | [2601.06966](https://arxiv.org/abs/2601.06966) |
-| 5 | DialogGraph-LLM: Graph-Informed LLMs for End-to-End Audio Dialogue Intent Recognition | ECAI 2025 | Contributing Author | [2511.11000](https://arxiv.org/abs/2511.11000) |
-| 6 | CogMAS: A Cognitively-Grounded Multi-Agent Framework for Explainable and Consistent Open-Ended Student Response Scoring | SMC 2025 | Contributing Author | — |
 
 ### Files changed
 
