@@ -324,6 +324,13 @@ body {
     color: white;
 }
 
+.pub-badge-preprint {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+}
+
+
+
 .pub-type {
     color: var(--text-secondary);
     font-size: 0.9rem;
