@@ -259,32 +259,11 @@ body {
 }
 
 /* ============================================
-   Publications Section
    ============================================ */
-.publications-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-xl);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 2px solid var(--border-color);
-}
 
 /* ============================================
-   Publications Section
    ============================================ */
-.publication-card {
-    background: var(--bg-card);
-    border-left: 3px solid var(--border-color);
-    padding: var(--spacing-md) var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
-    transition: all 0.3s ease;
-}
 
-.publication-card:hover {
-    border-left-color: var(--accent-color);
-    background: var(--bg-secondary);
-}
 
 .pub-header {
     display: flex;
@@ -638,9 +617,6 @@ body {
         justify-content: center;
     }
     
-    .publications-title {
-        font-size: 1.5rem;
-    }
     
     .pub-title {
         font-size: 1.1rem;
@@ -665,9 +641,6 @@ body {
         padding: var(--spacing-lg) var(--spacing-sm);
     }
     
-    .publication-card {
-        padding: var(--spacing-sm) var(--spacing-md);
-    }
     
     .social-link {
         font-size: 0.85rem;
@@ -689,7 +662,6 @@ body {
     }
 }
 
-.publication-card,
 .project-card,
 .blog-card,
 .experience-item {
