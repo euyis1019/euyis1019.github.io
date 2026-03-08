@@ -1,0 +1,106 @@
+博客大纲：A+B 融合版（v2）
+叙事主线：递进追问链（观察 → 内部 → 为什么 → 能做什么 → 意味着什么）
+
+================================================================
+标题：Your LLM Understood the Code — Then Forgot the Answer
+副标题：Patchscopes 揭示代码 LLM 内部处理动态差异，
+       以及这对 Code Agent 意味着什么
+================================================================
+
+一、Hook：同一个模型，判若两人
+   - 7B模型：Computing 18.6% vs Conditional 81.7%
+   - 这不是"题目难度不同"——是完全不同的内部能力
+   - 连接真实场景：Code agent（SWE-bench、Claude Code、Cursor等）
+     在 resolve 一个 issue 时，本质上反复在做两件事：
+     * 追踪数据流（这个变量到这里值是什么？）
+     * 推理控制流（走哪个分支？循环几次？）
+   - 引出核心问题：这两种能力在模型内部是怎么工作的？
+     它们的失败模式一样吗？
+
+二、任务设计：从 agent 场景到可控实验
+   - Code agent 的真实操作 → 我们的两大类实验任务映射：
+     * 数据流追踪：Copying（纯变量追踪）+ Computing（追踪+算术）
+     * 控制流推理：Conditional（条件判断）+ Loop（循环）+ Short-circuit（短路求值）
+   - 为什么拆成这五个：隔离单一变量、确定性 ground truth、单 token 答案保证干净信号
+   - 实验设置：Qwen2.5-Coder 0.5B-14B，每个任务的代码示例（各1-2行）
+
+三、工具：用 Patchscopes 给模型做逐层 MRI
+   - 一句话原理：逐层提取 hidden state → 注入 target prompt → 问"这一层算出答案了吗"
+   - 代码适配三个关键点（简述）：
+     * 必须用 last-position 注入（KV cache 约束）
+     * 解码能力是 task-dependent 的（不是万能工具）
+     * 大模型需要 first-token 校正（14B 续写 artifact）
+
+四、发现1：两大类任务，两种截然不同的"脑电图"
+   - 核心图：五个任务的逐层准确率曲线对比（7B）
+   - 控制流组（Conditional/Loop/Short-circuit）：
+     * 内部一致：instability 低（0.03-0.22），overthinking gap 小（7-10pp）
+     * 7B 表现稳定（81.7%、51.6%、85%）
+   - 数据流组（Copying/Computing）：
+     * 内部分裂巨大——纯追踪 vs 追踪+计算完全不同
+     * Copying：阶跃式，instability ≈ 0，FCL 晚（70-80%）但一到就稳定
+     * Computing：闪烁式，instability = 0.356，FCL 早（50-60%）但极不稳定
+   - 关键证据：F32 Difficulty-Matched 对比——即使 d=0 纯赋值链，
+     Computing 格式仍比 Copying 差 15.8pp，说明"计算格式"本身改变了处理方式
+   - Loop iter=1 几乎全对但 iter>1 崩溃（F23）——单次迭代走的是
+     数据流 pattern matching，不是真正的循环理解
+   - 小结：不是"有的难有的简单"，是处理方式本质不同
+
+五、发现2：Overthinking——算对了又忘了
+   - 核心数据：7B Computing，55.8% 在中间某层算对过，最终只有 18.6% 答对
+   - 37.2pp 被"想没了"——所有实验中最大的 overthinking gap
+   - 两组对比：
+     * 控制流组：gap 都在 10pp 以内，温和可控
+     * 数据流计算组：gap 37.2pp，灾难性
+   - 统计验证：25/25 个 (model,task) 组合都存在比最终层更好的退出层（p<10⁻⁷）
+   - 可视化：overthinking gap 热力图（model × task）
+
+六、发现3：Information Brewing——"知道"和"能说出来"是两回事
+   - Probing vs Patchscopes 对比
+   - Copying：gap ≈ 0pp（信息一旦存在就是可输出格式）
+   - Computing：gap 巨大（14B：Probing L2 检测到 → PS L33 才解码——31层酿造差距）
+   - 解读：算术中间结果编码在"非输出友好"格式中，需要额外层来"翻译"
+   - 这解释了 Computing overthinking 最严重的原因：信息存在但脆弱，后续层容易覆盖
+   - 可视化：Probing 曲线（渐进上升）vs PS 曲线（阶跃跳变）叠加图
+
+七、So What：Task-Aware Early Exit
+   - 数据：
+     * 7B Copying：79% → 99%（+20pp）@ L23
+     * 7B Computing：18.6% → 45%（+26.4pp）@ L22
+   - 不需要改架构，validation set 找最佳层即可
+   - 不同任务的最优退出策略不同（这正是"task-aware"的意义）
+   - 更激进策略：oracle early-exit / correct-k 策略对比
+
+八、Insights：这对 Code Agent 意味着什么
+   - [待补充]
+   - [待补充]
+   - [待补充]
+
+九、讨论与展望
+   - 局限性（诚实交代）：
+     * 只测了 Qwen2.5-Coder 一个家族
+     * Layer-level 粒度，不是 circuit/neuron level
+     * Probing 只覆盖了 Copying 和 Computing
+     * 实验任务是简化的 controlled stimuli，不是真实代码
+   - 开放问题：
+     * 跨模型家族是否有相同 pattern？
+     * 两类能力的分离在真实代码库（多文件、长上下文）中是否加剧？
+     * 能否基于 processing profile 做自适应推理路由？
+
+================================================================
+需要制作的图表清单（按出现顺序）：
+  1. 真实 agent 场景 → 两大类任务的映射示意图
+  2. 五个任务的代码示例（各1-2行）
+  3. Patchscopes 注入流程示意图
+  4. 逐层准确率曲线：五个任务叠加（7B），按两组着色
+  5. Overthinking gap 热力图：5 model × 5 task
+  6. Probing vs PS 曲线对比：Copying 和 Computing 各一组
+  7. Early-exit 策略对比柱状图：Final vs Best Fixed vs Oracle
+
+写作风格备注：
+  - 面向深度技术受众，术语首次出现要解释
+  - 数据驱动，每个 claim 附具体数字
+  - 中英文混合，术语保留英文
+  - 从 agent 实践者视角切入，不是纯学术口吻
+  - 参考 Anthropic interpretability blog 风格：严谨但可读
+================================================================
