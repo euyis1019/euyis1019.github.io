@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,51 +9,78 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-        
+
         body {
             font-family: 'Inter', sans-serif;
         }
-        
+
         .font-mono {
             font-family: 'JetBrains Mono', monospace;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .animate-fadeIn {
             animation: fadeIn 0.3s ease-out;
         }
-        
+
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
-        
+
         .animate-pulse {
             animation: pulse 2s infinite;
         }
-        
+
         .tab-btn.active {
             background: rgba(5, 150, 105, 0.1);
             color: #059669;
             box-shadow: 0 2px 8px -2px rgba(5, 150, 105, 0.2);
         }
-        
+
         .section-divider {
             background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.3), transparent);
             height: 1px;
         }
     </style>
 </head>
-<body class="bg-white text-slate-800 min-h-screen">
-    
+
+<body class="bg-white text-slate-800 min-h-screen pt-16">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-slate-200 z-50">
+        <div class="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
+            <a href="../" class="font-bold text-slate-800 text-lg">Yifu Guo</a>
+            <div class="flex items-center gap-6">
+                <a href="../" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Home</a>
+                <a href="../blog/" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Blog</a>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
     <section class="py-20 px-8 bg-gradient-to-b from-slate-50 to-white">
         <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-4 py-2 mb-6">
+            <div
+                class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-4 py-2 mb-6">
                 <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                 <span class="text-emerald-700 text-sm font-mono">BLOG ASSETS FOR SE-AGENT</span>
             </div>
@@ -60,8 +88,9 @@
                 Why Temperature Sampling Isn't Enough for Agents
             </h1>
             <p class="text-xl text-slate-500 leading-relaxed max-w-2xl mx-auto">
-                A deep dive into <span class="text-slate-700 font-medium">trajectory homogenization</span> and how 
-                <span class="text-emerald-600 font-medium">trajectory-level evolution</span> achieves 80% on SWE-bench Verified
+                A deep dive into <span class="text-slate-700 font-medium">trajectory homogenization</span> and how
+                <span class="text-emerald-600 font-medium">trajectory-level evolution</span> achieves 80% on SWE-bench
+                Verified
             </p>
         </div>
     </section>
@@ -79,21 +108,31 @@
                 </div>
                 <h2 class="text-4xl font-bold text-slate-800 mb-4">scikit-learn #14629: The Homogenization Trap</h2>
                 <p class="text-slate-500 text-lg max-w-3xl">
-                    MultiOutputClassifier fails to expose <code class="bg-slate-100 px-2 py-0.5 rounded text-emerald-600 border border-slate-200">classes_</code> attribute, 
-                    causing <code class="bg-red-50 px-2 py-0.5 rounded text-red-600 border border-red-200">AttributeError</code> in cross_val_predict
+                    MultiOutputClassifier fails to expose <code
+                        class="bg-slate-100 px-2 py-0.5 rounded text-emerald-600 border border-slate-200">classes_</code>
+                    attribute,
+                    causing <code
+                        class="bg-red-50 px-2 py-0.5 rounded text-red-600 border border-red-200">AttributeError</code>
+                    in cross_val_predict
                 </p>
             </div>
 
             <!-- Tab Navigation -->
             <div class="mb-8">
                 <div class="flex gap-2 bg-slate-100 p-1.5 rounded-xl w-fit">
-                    <button onclick="showTab('problem')" class="tab-btn active px-6 py-3 rounded-lg font-medium transition-all duration-300" data-tab="problem">
+                    <button onclick="showTab('problem')"
+                        class="tab-btn active px-6 py-3 rounded-lg font-medium transition-all duration-300"
+                        data-tab="problem">
                         🔍 The Problem
                     </button>
-                    <button onclick="showTab('traditional')" class="tab-btn px-6 py-3 rounded-lg font-medium transition-all duration-300 text-slate-500 hover:text-slate-700" data-tab="traditional">
+                    <button onclick="showTab('traditional')"
+                        class="tab-btn px-6 py-3 rounded-lg font-medium transition-all duration-300 text-slate-500 hover:text-slate-700"
+                        data-tab="traditional">
                         ❌ Traditional Agent
                     </button>
-                    <button onclick="showTab('seagent')" class="tab-btn px-6 py-3 rounded-lg font-medium transition-all duration-300 text-slate-500 hover:text-slate-700" data-tab="seagent">
+                    <button onclick="showTab('seagent')"
+                        class="tab-btn px-6 py-3 rounded-lg font-medium transition-all duration-300 text-slate-500 hover:text-slate-700"
+                        data-tab="seagent">
                         ✅ SE-Agent
                     </button>
                 </div>
@@ -113,16 +152,26 @@
                     </div>
                     <div class="space-y-4 text-sm">
                         <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5 font-medium">1</div>
-                            <p class="text-slate-600">Error surfaces in <span class="text-amber-600 font-medium">_validation.py</span></p>
+                            <div
+                                class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5 font-medium">
+                                1</div>
+                            <p class="text-slate-600">Error surfaces in <span
+                                    class="text-amber-600 font-medium">_validation.py</span></p>
                         </div>
                         <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5 font-medium">2</div>
-                            <p class="text-slate-600">cross_val_predict expects all classifiers to have <code class="text-emerald-600 bg-emerald-50 px-1 rounded">classes_</code></p>
+                            <div
+                                class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0 mt-0.5 font-medium">
+                                2</div>
+                            <p class="text-slate-600">cross_val_predict expects all classifiers to have <code
+                                    class="text-emerald-600 bg-emerald-50 px-1 rounded">classes_</code></p>
                         </div>
                         <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0 mt-0.5 font-bold">!</div>
-                            <p class="text-slate-600">Root cause: <span class="text-emerald-600 font-medium">multioutput.py</span> never stores <code class="text-emerald-600 bg-emerald-50 px-1 rounded">classes_</code> after fit()</p>
+                            <div
+                                class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0 mt-0.5 font-bold">
+                                !</div>
+                            <p class="text-slate-600">Root cause: <span
+                                    class="text-emerald-600 font-medium">multioutput.py</span> never stores <code
+                                    class="text-emerald-600 bg-emerald-50 px-1 rounded">classes_</code> after fit()</p>
                         </div>
                     </div>
                 </div>
@@ -132,7 +181,8 @@
                         <span class="text-emerald-500">💡</span> Key Insight
                     </h3>
                     <div class="relative">
-                        <blockquote class="relative p-6 text-lg italic text-slate-700 border-l-4 border-emerald-500 bg-white rounded-r-xl shadow-sm">
+                        <blockquote
+                            class="relative p-6 text-lg italic text-slate-700 border-l-4 border-emerald-500 bg-white rounded-r-xl shadow-sm">
                             "Stack trace shows WHERE the crash happens, but not WHERE the fix should go."
                         </blockquote>
                     </div>
@@ -159,39 +209,63 @@
                         <div class="flex items-center gap-4">
                             <div class="w-16 text-slate-400 text-sm font-mono">Try 1</div>
                             <div class="flex-1 flex items-center gap-2">
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">grep</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    grep</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">view</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    view</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-red-50 text-red-600 border border-red-200 font-medium">_validation.py</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-red-50 text-red-600 border border-red-200 font-medium">
+                                    _validation.py</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">submit</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    submit</div>
                             </div>
                             <div class="text-red-500 text-sm font-medium">❌ Fail</div>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="w-16 text-slate-400 text-sm font-mono">Try 2</div>
                             <div class="flex-1 flex items-center gap-2">
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">grep</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    grep</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">view</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    view</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-red-50 text-red-600 border border-red-200 font-medium">_validation.py</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-red-50 text-red-600 border border-red-200 font-medium">
+                                    _validation.py</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">submit</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    submit</div>
                             </div>
                             <div class="text-red-500 text-sm font-medium">❌ Fail</div>
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="w-16 text-slate-400 text-sm font-mono">Try 3</div>
                             <div class="flex-1 flex items-center gap-2">
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">grep</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    grep</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">view</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    view</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-red-50 text-red-600 border border-red-200 font-medium">_validation.py</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-red-50 text-red-600 border border-red-200 font-medium">
+                                    _validation.py</div>
                                 <div class="text-slate-400">→</div>
-                                <div class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">submit</div>
+                                <div
+                                    class="px-3 py-2 rounded-lg text-xs font-mono bg-slate-100 text-slate-600 border border-slate-200">
+                                    submit</div>
                             </div>
                             <div class="text-red-500 text-sm font-medium">❌ Fail</div>
                         </div>
@@ -201,7 +275,7 @@
                             <div class="text-red-500 text-sm font-medium">❌ Fail</div>
                         </div>
                     </div>
-                    
+
                     <div class="mt-8 p-4 bg-red-50 rounded-xl border border-red-200">
                         <div class="flex items-center gap-3">
                             <div class="text-3xl">🎯</div>
@@ -214,17 +288,21 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div
+                        class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                         <div class="text-3xl mb-4">🔬</div>
                         <div class="font-semibold text-slate-800 mb-2">Narrow Problem Framing</div>
                         <div class="text-slate-500 text-sm">Agents frame the bug based on stack trace location</div>
                     </div>
-                    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div
+                        class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                         <div class="text-3xl mb-4">🧲</div>
                         <div class="font-semibold text-slate-800 mb-2">Probability Gravity</div>
-                        <div class="text-slate-500 text-sm">Next-token prediction pulls toward high-frequency patterns</div>
+                        <div class="text-slate-500 text-sm">Next-token prediction pulls toward high-frequency patterns
+                        </div>
                     </div>
-                    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div
+                        class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                         <div class="text-3xl mb-4">📋</div>
                         <div class="font-semibold text-slate-800 mb-2">Similar Rollouts</div>
                         <div class="text-slate-500 text-sm">Each attempt produces near-identical patches</div>
@@ -238,34 +316,39 @@
                     <h3 class="text-xl font-semibold mb-6 flex items-center gap-2 text-slate-800">
                         <span class="text-emerald-500">🌳</span> Trajectory-Level Evolution
                     </h3>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div class="space-y-4">
                             <div class="text-sm text-slate-400 font-mono mb-2">// Trajectory Pool (Self-Evolution)</div>
                             <div class="flex items-center gap-4 p-3 rounded-lg bg-amber-50 border border-amber-200">
                                 <div class="w-24 text-xs font-mono text-slate-500">P-greedy</div>
                                 <div class="flex-1 font-mono text-sm text-slate-500">_validation.py</div>
-                                <div class="text-xs px-2 py-1 rounded bg-amber-100 text-amber-700 font-medium">⟲ revision</div>
+                                <div class="text-xs px-2 py-1 rounded bg-amber-100 text-amber-700 font-medium">⟲
+                                    revision</div>
                             </div>
                             <div class="flex items-center gap-4 p-3 rounded-lg bg-amber-50 border border-amber-200">
                                 <div class="w-24 text-xs font-mono text-slate-500">P-test</div>
                                 <div class="flex-1 font-mono text-sm text-slate-500">_validation.py</div>
-                                <div class="text-xs px-2 py-1 rounded bg-amber-100 text-amber-700 font-medium">⟲ revision</div>
+                                <div class="text-xs px-2 py-1 rounded bg-amber-100 text-amber-700 font-medium">⟲
+                                    revision</div>
                             </div>
                             <div class="flex items-center gap-4 p-3 rounded-lg bg-emerald-50 border border-emerald-300">
                                 <div class="w-24 text-xs font-mono text-slate-500">P-interface</div>
                                 <div class="flex-1 font-mono text-sm text-emerald-700 font-medium">multioutput.py</div>
-                                <div class="text-xs px-2 py-1 rounded bg-emerald-200 text-emerald-800 font-medium">✓ solved</div>
+                                <div class="text-xs px-2 py-1 rounded bg-emerald-200 text-emerald-800 font-medium">✓
+                                    solved</div>
                             </div>
                             <div class="flex items-center gap-4 p-3 rounded-lg bg-slate-50 border border-slate-200">
                                 <div class="w-24 text-xs font-mono text-slate-500">Transfer</div>
                                 <div class="flex-1 font-mono text-sm text-slate-500">base.py</div>
-                                <div class="text-xs px-2 py-1 rounded bg-slate-200 text-slate-600 font-medium">◐ partial</div>
+                                <div class="text-xs px-2 py-1 rounded bg-slate-200 text-slate-600 font-medium">◐ partial
+                                </div>
                             </div>
                             <div class="flex items-center gap-4 p-3 rounded-lg bg-emerald-50 border border-emerald-300">
                                 <div class="w-24 text-xs font-mono text-slate-500">Crossover</div>
                                 <div class="flex-1 font-mono text-sm text-emerald-700 font-medium">multioutput.py</div>
-                                <div class="text-xs px-2 py-1 rounded bg-emerald-200 text-emerald-800 font-medium">✓ solved</div>
+                                <div class="text-xs px-2 py-1 rounded bg-emerald-200 text-emerald-800 font-medium">✓
+                                    solved</div>
                             </div>
                         </div>
 
@@ -276,14 +359,16 @@
                                     <span class="text-xl">🔄</span>
                                     <span class="font-semibold text-slate-800">Revision</span>
                                 </div>
-                                <p class="text-slate-600 text-sm pl-9">Reflect on failures → try different perspective</p>
+                                <p class="text-slate-600 text-sm pl-9">Reflect on failures → try different perspective
+                                </p>
                             </div>
                             <div class="p-4 rounded-xl bg-purple-50 border border-purple-200">
                                 <div class="flex items-center gap-3 mb-2">
                                     <span class="text-xl">🧬</span>
                                     <span class="font-semibold text-slate-800">Recombination</span>
                                 </div>
-                                <p class="text-slate-600 text-sm pl-9">Crossover: merge localization + comprehensive fix</p>
+                                <p class="text-slate-600 text-sm pl-9">Crossover: merge localization + comprehensive fix
+                                </p>
                             </div>
                             <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
                                 <div class="flex items-center gap-3 mb-2">
@@ -325,14 +410,16 @@
             </div>
 
             <!-- Takeaway -->
-            <div class="mt-12 p-6 bg-gradient-to-r from-emerald-50 via-white to-teal-50 rounded-2xl border border-emerald-200">
+            <div
+                class="mt-12 p-6 bg-gradient-to-r from-emerald-50 via-white to-teal-50 rounded-2xl border border-emerald-200">
                 <div class="flex items-start gap-4">
                     <div class="text-3xl">🎯</div>
                     <div>
                         <div class="font-semibold text-lg text-slate-800 mb-2">Core Insight for Agent Builders</div>
                         <p class="text-slate-600">
-                            Temperature sampling creates <strong class="text-slate-800">token-level diversity</strong>, 
-                            but agents need <strong class="text-emerald-600">trajectory-level diversity</strong> to escape the 
+                            Temperature sampling creates <strong class="text-slate-800">token-level diversity</strong>,
+                            but agents need <strong class="text-emerald-600">trajectory-level diversity</strong> to
+                            escape the
                             homogenization trap. SE-Agent's operators inject prompts that force orthogonal exploration.
                         </p>
                     </div>
@@ -353,7 +440,8 @@
                 </div>
                 <h2 class="text-4xl font-bold text-slate-800 mb-4">SWE-bench Verified Performance</h2>
                 <p class="text-slate-500 text-lg">
-                    Pass@1 comparison across 5 LLMs • SE-Agent delivers <span class="text-emerald-600 font-semibold">+30-112%</span> relative improvement
+                    Pass@1 comparison across 5 LLMs • SE-Agent delivers <span
+                        class="text-emerald-600 font-semibold">+30-112%</span> relative improvement
                 </p>
             </div>
 
@@ -370,7 +458,8 @@
                         <span class="text-slate-600 text-sm">SWE-Search (MCTS)</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <div class="w-4 h-4 rounded" style="background: linear-gradient(to top, #059669, #34d399)"></div>
+                        <div class="w-4 h-4 rounded" style="background: linear-gradient(to top, #059669, #34d399)">
+                        </div>
                         <span class="text-slate-600 text-sm">SE-Agent (Ours)</span>
                     </div>
                 </div>
@@ -384,14 +473,16 @@
                             <div class="flex-1 space-y-1">
                                 <div class="h-5 rounded-r bg-slate-400" style="width: 48.6%"></div>
                                 <div class="h-5 rounded-r bg-amber-400" style="width: 60.6%"></div>
-                                <div class="h-6 rounded-r shadow-md relative" style="width: 84.3%; background: linear-gradient(to right, #059669, #34d399)">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">54.8%</span>
+                                <div class="h-6 rounded-r shadow-md relative"
+                                    style="width: 84.3%; background: linear-gradient(to right, #059669, #34d399)">
+                                    <span
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">54.8%</span>
                                 </div>
                             </div>
                             <div class="w-16 text-emerald-600 text-sm font-semibold">+73%</div>
                         </div>
                     </div>
-                    
+
                     <!-- Qwen -->
                     <div class="group">
                         <div class="flex items-center gap-4 mb-2">
@@ -399,14 +490,16 @@
                             <div class="flex-1 space-y-1">
                                 <div class="h-5 rounded-r bg-slate-400" style="width: 28.9%"></div>
                                 <div class="h-5 rounded-r bg-amber-400" style="width: 36%"></div>
-                                <div class="h-6 rounded-r shadow-md relative" style="width: 59.7%; background: linear-gradient(to right, #059669, #34d399)">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">38.8%</span>
+                                <div class="h-6 rounded-r shadow-md relative"
+                                    style="width: 59.7%; background: linear-gradient(to right, #059669, #34d399)">
+                                    <span
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">38.8%</span>
                                 </div>
                             </div>
                             <div class="w-16 text-emerald-600 text-sm font-semibold">+106%</div>
                         </div>
                     </div>
-                    
+
                     <!-- Llama -->
                     <div class="group">
                         <div class="flex items-center gap-4 mb-2">
@@ -414,14 +507,16 @@
                             <div class="flex-1 space-y-1">
                                 <div class="h-5 rounded-r bg-slate-400" style="width: 23.7%"></div>
                                 <div class="h-5 rounded-r bg-amber-400" style="width: 33.5%"></div>
-                                <div class="h-6 rounded-r shadow-md relative" style="width: 50.2%; background: linear-gradient(to right, #059669, #34d399)">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">32.6%</span>
+                                <div class="h-6 rounded-r shadow-md relative"
+                                    style="width: 50.2%; background: linear-gradient(to right, #059669, #34d399)">
+                                    <span
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">32.6%</span>
                                 </div>
                             </div>
                             <div class="w-16 text-emerald-600 text-sm font-semibold">+112%</div>
                         </div>
                     </div>
-                    
+
                     <!-- GPT-4o -->
                     <div class="group">
                         <div class="flex items-center gap-4 mb-2">
@@ -429,14 +524,16 @@
                             <div class="flex-1 space-y-1">
                                 <div class="h-5 rounded-r bg-slate-400" style="width: 34.5%"></div>
                                 <div class="h-5 rounded-r bg-amber-400" style="width: 50.2%"></div>
-                                <div class="h-6 rounded-r shadow-md relative" style="width: 62.2%; background: linear-gradient(to right, #059669, #34d399)">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">40.4%</span>
+                                <div class="h-6 rounded-r shadow-md relative"
+                                    style="width: 62.2%; background: linear-gradient(to right, #059669, #34d399)">
+                                    <span
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">40.4%</span>
                                 </div>
                             </div>
                             <div class="w-16 text-emerald-600 text-sm font-semibold">+80%</div>
                         </div>
                     </div>
-                    
+
                     <!-- Claude -->
                     <div class="group">
                         <div class="flex items-center gap-4 mb-2">
@@ -444,8 +541,10 @@
                             <div class="flex-1 space-y-1">
                                 <div class="h-5 rounded-r bg-slate-400" style="width: 62.5%"></div>
                                 <div class="h-5 rounded-r bg-amber-400" style="width: 72.9%"></div>
-                                <div class="h-6 rounded-r shadow-md relative" style="width: 94.2%; background: linear-gradient(to right, #059669, #34d399)">
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">61.2%</span>
+                                <div class="h-6 rounded-r shadow-md relative"
+                                    style="width: 94.2%; background: linear-gradient(to right, #059669, #34d399)">
+                                    <span
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 text-sm font-bold text-white">61.2%</span>
                                 </div>
                             </div>
                             <div class="w-16 text-emerald-600 text-sm font-semibold">+51%</div>
@@ -494,7 +593,8 @@
                     <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
                         <div class="text-emerald-600 font-semibold mb-3">🎯 Key Finding</div>
                         <p class="text-slate-600 leading-relaxed">
-                            SE-Agent reaches <strong class="text-slate-800">near-optimal performance with just 10 trajectories</strong>, 
+                            SE-Agent reaches <strong class="text-slate-800">near-optimal performance with just 10
+                                trajectories</strong>,
                             demonstrating that trajectory-level evolution is far more efficient than naive sampling.
                         </p>
                         <div class="mt-4 flex gap-4 text-sm flex-wrap">
@@ -512,14 +612,18 @@
                     <div class="flex flex-col justify-center">
                         <div class="space-y-4">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-500 text-xl">📉</div>
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center text-red-500 text-xl">
+                                    📉</div>
                                 <div>
                                     <div class="text-slate-700 font-medium">Traditional TTS</div>
                                     <div class="text-slate-500 text-sm">Diminishing returns after ~5 samples</div>
                                 </div>
                             </div>
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-500 text-xl">📈</div>
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-500 text-xl">
+                                    📈</div>
                                 <div>
                                     <div class="text-slate-700 font-medium">SE-Agent Evolution</div>
                                     <div class="text-slate-500 text-sm">Each iteration explores orthogonal paths</div>
@@ -546,52 +650,60 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div
+                    class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-4">🎯</div>
                     <h3 class="text-xl font-semibold text-slate-800 mb-3">The Homogenization Problem</h3>
                     <p class="text-slate-600 leading-relaxed">
-                        LLM agents don't fail randomly—they fail in <em class="text-slate-700">highly correlated</em> ways. 
+                        LLM agents don't fail randomly—they fail in <em class="text-slate-700">highly correlated</em>
+                        ways.
                         Running the same agent 10 times often produces 9 nearly identical wrong answers.
                         This makes traditional test-time scaling (more samples = better) extremely inefficient.
                     </p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div
+                    class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-4">🌡️</div>
                     <h3 class="text-xl font-semibold text-slate-800 mb-3">Temperature ≠ Diversity</h3>
                     <p class="text-slate-600 leading-relaxed">
-                        Increasing temperature or top-p creates <em class="text-slate-700">token-level</em> variation, 
-                        not <em class="text-slate-700">strategy-level</em> diversity. The agent still follows the same reasoning pattern,
+                        Increasing temperature or top-p creates <em class="text-slate-700">token-level</em> variation,
+                        not <em class="text-slate-700">strategy-level</em> diversity. The agent still follows the same
+                        reasoning pattern,
                         just with slightly different wording. You need to intervene at the trajectory level.
                     </p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div
+                    class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-4">💉</div>
                     <h3 class="text-xl font-semibold text-slate-800 mb-3">Two Injection Points</h3>
                     <p class="text-slate-600 leading-relaxed">
-                        <strong class="text-slate-700">System prompt:</strong> Stable, affects overall strategy.<br/>
-                        <strong class="text-slate-700">Key action injection:</strong> Stronger, more targeted. 
+                        <strong class="text-slate-700">System prompt:</strong> Stable, affects overall strategy.<br />
+                        <strong class="text-slate-700">Key action injection:</strong> Stronger, more targeted.
                         In SWE-bench, this is typically the step right after bug reproduction succeeds.
                     </p>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                <div
+                    class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                     <div class="text-3xl mb-4">🧬</div>
                     <h3 class="text-xl font-semibold text-slate-800 mb-3">Treat Failures as "Wrong"</h3>
                     <p class="text-slate-600 leading-relaxed">
-                        The revision operator's power comes from explicitly framing previous attempts as <em class="text-slate-700">incorrect</em>.
+                        The revision operator's power comes from explicitly framing previous attempts as <em
+                            class="text-slate-700">incorrect</em>.
                         This prompts the model to explore genuinely different approaches rather than minor variations.
                     </p>
                 </div>
             </div>
 
             <!-- Final CTA -->
-            <div class="mt-12 p-8 bg-gradient-to-r from-emerald-50 via-white to-blue-50 rounded-2xl border border-slate-200 text-center">
+            <div
+                class="mt-12 p-8 bg-gradient-to-r from-emerald-50 via-white to-blue-50 rounded-2xl border border-slate-200 text-center">
                 <h3 class="text-2xl font-bold text-slate-800 mb-4">The Bottom Line</h3>
                 <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    Making each agent attempt <strong class="text-emerald-600">"orthogonal"</strong> in solution space 
-                    is more valuable than making more attempts. SE-Agent achieves this through trajectory-level 
+                    Making each agent attempt <strong class="text-emerald-600">"orthogonal"</strong> in solution space
+                    is more valuable than making more attempts. SE-Agent achieves this through trajectory-level
                     revision, recombination, and refinement.
                 </p>
             </div>
@@ -612,16 +724,16 @@
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.add('hidden');
             });
-            
+
             // Remove active from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
                 btn.classList.add('text-slate-500');
             });
-            
+
             // Show selected tab
             document.getElementById('tab-' + tabName).classList.remove('hidden');
-            
+
             // Activate button
             const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
             activeBtn.classList.add('active');
@@ -629,4 +741,5 @@
         }
     </script>
 </body>
+
 </html>
