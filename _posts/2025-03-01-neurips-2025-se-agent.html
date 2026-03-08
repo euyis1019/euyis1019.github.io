@@ -1,3 +1,11 @@
+---
+layout: null
+title: "NeurIPS 2025 SE-Agent Case Study"
+date: 2025-03-01
+categories: [Research]
+excerpt: "A detailed analysis and case study of the SE-Agent performance at NeurIPS 2025, exploring multimodal learning
+and agentic workflows."
+---
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SE-Agent Blog Assets - Case Study & Results</title>
-    <link rel="icon" type="image/png" href="image.png">
+    <link rel="icon" type="image/png" href="{{ '/assets/images/se-agent.png' | relative_url }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -68,10 +76,12 @@
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-b border-slate-200 z-50">
         <div class="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
-            <a href="../" class="font-bold text-slate-800 text-lg">Yifu Guo</a>
+            <a href="{{ '/' | relative_url }}" class="font-bold text-slate-800 text-lg">Yifu Guo</a>
             <div class="flex items-center gap-6">
-                <a href="../" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Home</a>
-                <a href="../blog/" class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Blog</a>
+                <a href="{{ '/' | relative_url }}"
+                    class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Home</a>
+                <a href="{{ '/blog/' | relative_url }}"
+                    class="text-slate-600 hover:text-emerald-600 font-medium transition-colors">Blog</a>
             </div>
         </div>
     </nav>

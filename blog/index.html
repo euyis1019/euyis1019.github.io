@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,16 +32,16 @@
             <p class="section-subtitle">Thoughts on AI, Agents, and Research</p>
 
             <div class="blog-grid">
-                <!-- Blog Post 1 -->
+                {% for post in site.posts %}
                 <article class="blog-card">
-                    <div class="blog-category">Research</div>
-                    <div class="blog-date">March 2025</div>
-                    <h2 class="blog-title">NeurIPS 2025 SE-Agent Case Study</h2>
-                    <p class="blog-excerpt">A detailed analysis and case study of the SE-Agent performance at NeurIPS
-                        2025, exploring multimodal learning and agentic workflows.</p>
-                    <a href="../nips2025_SE-Agent_Case_study/" class="blog-link">Read More <i
+                    <div class="blog-category">{{ post.categories | join: ", " }}</div>
+                    <div class="blog-date">{{ post.date | date: "%B %Y" }}</div>
+                    <h2 class="blog-title">{{ post.title }}</h2>
+                    <p class="blog-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+                    <a href="{{ post.url | relative_url }}" class="blog-link">Read More <i
                             class="fas fa-arrow-right"></i></a>
                 </article>
+                {% endfor %}
 
                 <!-- Placeholder for future blogs -->
                 <article class="blog-card" style="opacity: 0.7; pointer-events: none;">
