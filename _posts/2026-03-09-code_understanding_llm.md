@@ -2,6 +2,7 @@
 layout: default
 title: "Your LLM Understood the Code — Then Forgot the Answer"
 date: 2026-03-09
+permalink: /blog/code_understanding_llm/
 categories: [Research, Interpretability, Code]
 excerpt: "Patchscopes 揭示代码 LLM 内部处理动态差异，以及这对 Code Agent 意味着什么 | Patchscopes reveals dynamic differences in internal processing of Code LLMs."
 ---
