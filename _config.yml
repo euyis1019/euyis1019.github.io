@@ -4,6 +4,7 @@ name: "Yifu Guo (郭毅芙)"
 description: "Personal Website"
 url: https://euyis1019.github.io
 baseurl: ""
+future: true
 
 # Exclude files from processing
 exclude:

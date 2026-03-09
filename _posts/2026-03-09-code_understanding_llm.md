@@ -175,7 +175,7 @@ figcaption {
 
 为什么必须拆分成这五个极其简单的形式？因为在 Interpretability（机制可解释性）的研究中，我们需要 **隔离单一变量、提供确定性的 ground truth，并保证单 token 的答案**，从而获得最干净的信号分析模型内部的动态变化，而不是受到大模型自回归解码时带来的幻觉干扰。
 
-<img src="assets/progress.png" class="tech-image" alt="Agent scenario mapping">
+<img src="/blog/code_understanding_llm/assets/progress.png" class="tech-image" alt="Agent scenario mapping">
 <figcaption>图1：左侧为实际 agent 的代码逻辑，右侧为对应提纯出的单步 Copying / Conditional 测试用例（答案均设计为 0-9 的单一数字）。</figcaption>
 
 对于本次评估，我们覆盖了 Qwen2.5-Coder 家族从 **0.5B 到 14B** 的全部参数量级。
@@ -193,7 +193,7 @@ figcaption {
 2. **解码能力的 Task-Dependent。** Patchscopes 不是万能工具，它能否顺利提取出信息，高度取决于代码任务的运算密度配置。
 3. **大模型 First-token 校正。** 在 14B 模型上发现，生成惯性太大会导致幻觉续写，必须截断使用 First-token evaluation。
 
-<img src="assets/patchscopes.png" class="tech-image" alt="Patchscopes extraction process">
+<img src="/blog/code_understanding_llm/assets/patchscopes.png" class="tech-image" alt="Patchscopes extraction process">
 <figcaption>图2：源模型在计算代码切块时，逐层隐状态被提取并 Patch 到探测 prompt 的对应位置，直观展示各层知识成熟状态。</figcaption>
 
 ---
@@ -218,7 +218,7 @@ figcaption {
     即使退化到 <span class="code-inline">d=0</span>（纯赋值，无算术运算）的 Computing 格式，7B 模型的表现依然比 Copying 任务差 <b>15.8 个百分点</b>。这表明导致崩溃的原因<b>不是绝对难度上升，而是"计算"的代码格式本身就激活了更脆弱、更不稳定的处理链路。</b>
 </div>
 
-<img src="assets/findings.png" class="tech-image" alt="Layer-wise accuracy evolution">
+<img src="/blog/code_understanding_llm/assets/findings.png" class="tech-image" alt="Layer-wise accuracy evolution">
 <figcaption>图3：五个代码任务的逐层准确率演化折线。注意 Copying 后期的阶跃陡升与 Computing 在中期的剧烈震荡（闪烁）。</figcaption>
 
 ---
@@ -256,7 +256,7 @@ figcaption {
 我们将这两者间的 **31 层差距** 称为 **"Information Brewing"（信息酝酿期）**。
 这很好地解释了 Computing 的极端不稳定：模型在极浅层计算出了算术特征并编码进 Hidden state 中，但该表征是一种**对自回归解码及其不友好的格式**。模型强行花费数十层对其进行翻转与“翻译”，此过程中由于特征非常脆弱，很容易被后续注意力的噪声覆盖（即发生 Overthinking）。
 
-<img src="assets/method.png" class="tech-image" alt="Probing vs Patchscopes comparison">
+<img src="/blog/code_understanding_llm/assets/method.png" class="tech-image" alt="Probing vs Patchscopes comparison">
 <figcaption>图5：Probing渐进上升 vs Patchscopes阶跃跳变的重叠对比。两者的宽阔带揭示了 “信息酝酿” 的过程。</figcaption>
 
 ---
@@ -365,7 +365,7 @@ To answer these questions, we need to map the real-world operations of Code Agen
 
 Why do we need to break them down into such extremely simple forms? Because in Interpretability research, we must **isolate single variables, provide deterministic ground truths, and guarantee single-token answers**. This ensures we obtain the cleanest signals to analyze the model's internal dynamics, avoiding the hallucination interference brought by autoregressive decoding in large models.
 
-<img src="assets/progress.png" class="tech-image" alt="Agent scenario mapping">
+<img src="/blog/code_understanding_llm/assets/progress.png" class="tech-image" alt="Agent scenario mapping">
 <figcaption>Figure 1: Left - Long code logic in real agent contexts. Right - Extracted single-step test cases (answers constrained to 0-9 digits).</figcaption>
 
 For this evaluation, we covered the entire parameter spectrum of the Qwen2.5-Coder family from **0.5B to 14B**.
@@ -383,7 +383,7 @@ In the context of studying code capabilities, we specially adapted this tool:
 2. **Task-Dependent Decoding Capabilities.** Patchscopes is not a silver bullet; its ability to smoothly extract information heavily depends on the code's computational density.
 3. **First-token Correction for Large Models.** We discovered that the 14B model exhibits hallucinated generation due to its immense momentum, necessitating a First-token evaluation cutoff.
 
-<img src="assets/patchscopes.png" class="tech-image" alt="Patchscopes extraction process">
+<img src="/blog/code_understanding_llm/assets/patchscopes.png" class="tech-image" alt="Patchscopes extraction process">
 <figcaption>Figure 2: Hidden states are extracted layer by layer and "patched" into a probing prompt, intuitively displaying knowledge maturity.</figcaption>
 
 ---
@@ -408,7 +408,7 @@ This group reveals two vastly different personas internally:
     Even when degraded to <span class="code-inline">d=0</span> (pure assignment syntax, no math), the 7B model still performs <b>15.8 percentage points worse</b> than the Copying task. This indicates that the failure is <b>not due to absolute difficulty, but rather the "computing" code format itself activating a more fragile and unstable processing pathway.</b>
 </div>
 
-<img src="assets/findings.png" class="tech-image" alt="Layer-wise accuracy evolution">
+<img src="/blog/code_understanding_llm/assets/findings.png" class="tech-image" alt="Layer-wise accuracy evolution">
 <figcaption>Figure 3: Layer-wise accuracy evolution. Notice the steep late rise of Copying compared to the violent mid-stage oscillation ("flicker") of Computing.</figcaption>
 
 ---
@@ -446,7 +446,7 @@ Why does Computing exhibit such absurd volatility and forgetting? We introduced 
 We refer to this **31-layer gap** as **"Information Brewing"**. 
 This perfectly explains Computing's extreme instability: the model calculates arithmetic features in shallow layers and encodes them into the Hidden state, but in a **highly unfriendly format for autoregressive decoding**. The model forces dozens of layers to flip and "translate" it. During this process, because the feature is fragile, it gets easily overwritten by subsequent attention noise (hence, Overthinking).
 
-<img src="assets/method.png" class="tech-image" alt="Probing vs Patchscopes comparison">
+<img src="/blog/code_understanding_llm/assets/method.png" class="tech-image" alt="Probing vs Patchscopes comparison">
 <figcaption>Figure 5: Probing shows when information exists; Patchscopes shows when it becomes conveyable. The broad gap between them reveals the "Brewing" phase.</figcaption>
 
 ---
