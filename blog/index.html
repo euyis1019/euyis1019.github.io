@@ -1,74 +1,35 @@
 ---
+layout: default
+title: "Blog - Yifu Guo"
 ---
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Yifu Guo</title>
-    <link rel="stylesheet" href="../yifu_style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+<!-- Blog Header -->
+<section class="section main-section">
+    <div class="container-simple">
+        <h1 class="section-title">Blog</h1>
+        <p class="section-subtitle">Thoughts on AI, Agents, and Research</p>
 
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="../" class="nav-logo">Yifu Guo</a>
-            <div class="nav-menu">
-                <a href="../" class="nav-link">Home</a>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
+        <div class="blog-grid">
+            {% for post in site.posts %}
+            <article class="blog-card">
+                <div class="blog-category">{{ post.categories | join: ", " }}</div>
+                <div class="blog-date">{{ post.date | date: "%B %Y" }}</div>
+                <h2 class="blog-title">{{ post.title }}</h2>
+                <p class="blog-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
+                <a href="{{ post.url | relative_url }}" class="blog-link">Read More <i
+                        class="fas fa-arrow-right"></i></a>
+            </article>
+            {% endfor %}
+
+            <!-- Placeholder for future blogs -->
+            <article class="blog-card" style="opacity: 0.7; pointer-events: none;">
+                <div class="blog-category">Opinion</div>
+                <div class="blog-date">Upcoming</div>
+                <h2 class="blog-title">Future Research Directions in Multimodal Agents</h2>
+                <p class="blog-excerpt">Coming soon... I'll be sharing some insights on the next generation of
+                    multimodal agents and their applications.</p>
+                <span class="blog-link">Stay tuned <i class="fas fa-arrow-right"></i></span>
+            </article>
         </div>
-    </nav>
-
-    <!-- Blog Header -->
-    <section class="section main-section">
-        <div class="container-simple">
-            <h1 class="section-title">Blog</h1>
-            <p class="section-subtitle">Thoughts on AI, Agents, and Research</p>
-
-            <div class="blog-grid">
-                {% for post in site.posts %}
-                <article class="blog-card">
-                    <div class="blog-category">{{ post.categories | join: ", " }}</div>
-                    <div class="blog-date">{{ post.date | date: "%B %Y" }}</div>
-                    <h2 class="blog-title">{{ post.title }}</h2>
-                    <p class="blog-excerpt">{{ post.excerpt | strip_html | truncatewords: 25 }}</p>
-                    <a href="{{ post.url | relative_url }}" class="blog-link">Read More <i
-                            class="fas fa-arrow-right"></i></a>
-                </article>
-                {% endfor %}
-
-                <!-- Placeholder for future blogs -->
-                <article class="blog-card" style="opacity: 0.7; pointer-events: none;">
-                    <div class="blog-category">Opinion</div>
-                    <div class="blog-date">Upcoming</div>
-                    <h2 class="blog-title">Future Research Directions in Multimodal Agents</h2>
-                    <p class="blog-excerpt">Coming soon... I'll be sharing some insights on the next generation of
-                        multimodal agents and their applications.</p>
-                    <span class="blog-link">Stay tuned <i class="fas fa-arrow-right"></i></span>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Yifu Guo. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="../">Home</a> ·
-                <a href="https://github.com/euyis1019" target="_blank">GitHub</a> ·
-                <a href="mailto:1572189162@qq.com">Email</a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../yifu_script.js"></script>
-</body>
-
-</html>
+    </div>
+</section>

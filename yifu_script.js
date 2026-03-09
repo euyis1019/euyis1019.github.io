@@ -19,11 +19,11 @@ const getTheme = () => {
 const setTheme = (theme) => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
-    
+
     // Update button icon
     const themeToggle = document.getElementById('themeToggle');
     const icon = themeToggle.querySelector('i');
-    
+
     if (theme === 'dark') {
         icon.classList.remove('fa-moon');
         icon.classList.add('fa-sun');
@@ -37,7 +37,7 @@ const setTheme = (theme) => {
 document.addEventListener('DOMContentLoaded', () => {
     const currentTheme = getTheme();
     setTheme(currentTheme);
-    
+
     // Theme toggle button event listener
     const themeToggle = document.getElementById('themeToggle');
     themeToggle.addEventListener('click', () => {
@@ -52,20 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
-            
+
             // Only handle internal anchor links
             if (href.startsWith('#')) {
                 e.preventDefault();
                 const targetSection = document.querySelector(href);
-                
+
                 if (targetSection) {
                     const navHeight = document.querySelector('.navbar').offsetHeight;
                     const targetPosition = targetSection.offsetTop - navHeight;
-                    
+
                     window.scrollTo({
                         top: targetPosition,
                         behavior: 'smooth'
@@ -77,22 +77,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// Navbar Background on Scroll
+// Navbar Scroll State
 // ============================================
-let lastScroll = 0;
 const navbar = document.querySelector('.navbar');
 
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    // Add shadow when scrolled
-    if (currentScroll > 100) {
-        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    if (window.scrollY > 20) {
+        navbar.classList.add('scrolled');
     } else {
-        navbar.style.boxShadow = 'none';
+        navbar.classList.remove('scrolled');
     }
-    
-    lastScroll = currentScroll;
 });
 
 // ============================================
@@ -117,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const animatedElements = document.querySelectorAll(
         '.publication-card, .project-card, .blog-card, .experience-item, .stat-card'
     );
-    
+
     animatedElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
@@ -131,11 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     const pubTitles = document.querySelectorAll('.pub-title');
-    
+
     pubTitles.forEach(title => {
         title.style.cursor = 'pointer';
         title.setAttribute('title', 'Click to copy title');
-        
+
         title.addEventListener('click', () => {
             const text = title.textContent;
             navigator.clipboard.writeText(text).then(() => {
@@ -153,10 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     z-index: 1000;
                     animation: fadeOut 2s forwards;
                 `;
-                
+
                 title.style.position = 'relative';
                 title.appendChild(tooltip);
-                
+
                 setTimeout(() => {
                     tooltip.remove();
                 }, 2000);
@@ -183,7 +177,7 @@ window.addEventListener('scroll', () => {
     const hero = document.querySelector('.hero');
     const scrolled = window.pageYOffset;
     const heroHeight = hero.offsetHeight;
-    
+
     if (scrolled < heroHeight) {
         hero.style.transform = `translateY(${scrolled * 0.5}px)`;
     }
@@ -206,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('load', () => {
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.3s ease';
-    
+
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
