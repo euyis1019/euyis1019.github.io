@@ -90,10 +90,8 @@ body {
     padding: 0.6rem 2rem;
 }
 
-[data-theme="dark"] .navbar,
-[data-theme="dark"] .navbar.scrolled {
-    /* These are now handled by variables */
-}
+/* Dark mode navigation styles are now handled via CSS variables */
+
 
 .nav-container {
     max-width: 1100px;
