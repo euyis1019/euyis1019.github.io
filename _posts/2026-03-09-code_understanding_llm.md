@@ -50,7 +50,7 @@ body {
 }
 
 .post-container {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 3rem auto;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.8;
@@ -58,13 +58,13 @@ body {
     padding: 24px;
     background: var(--post-bg);
     border-radius: 20px;
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 10px 60px rgba(0, 0, 0, 0.01);
     padding: 4rem;
     transition: all 0.3s ease;
 }
 
 [data-theme="dark"] .post-container {
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 60px rgba(0, 0, 0, 0.08);
 }
 
 .post-header {
