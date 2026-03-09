@@ -195,11 +195,11 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
     </div>
 </div>
 
-<p>代码大模型在处理代码时，内部究竟发生了什么？</p>
+<p>今天，Code Agent 已经能够作为虚拟的软件工程师，在真实世界的复杂代码库中自主解决 issue、编写测试、重构系统。但剥开这层宏大的表现，它们在底层反复调用的核心基本功，其实就是那么原子的几种代码推演能力。可是，当大模型在处理这些代码时，内部究竟发生了什么？</p>
 
-<p>我们通常只能看到最终输出对或者错，但这掩盖了一个有趣的可能性：<strong>很多时候模型其实会做，它已经在最初的几层网络里算出了正确答案，但却在随后的计算中自己把它覆盖掉了。</strong></p>
+<p>我们通常只能看到最终输出的“成功”或“失败”，但这掩盖了一个惊人的可能性：<strong>很多时候模型其实会做，它已经在最初的几层网络里算出了正确答案，但却在随后的计算中自己把它覆盖掉了。</strong></p>
 
-<p>在这篇博客中，我们用一组简单的受控代码实验，结合可解释性工具 <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024)，去解剖 Qwen2.5-Coder 内部的处理时序。我们并没有发明新机制，只是在这个特殊的场景里用最干净的探针，照亮了一个让人有些意外的现象：</p>
+<p>在这篇博客中，我们用一组单纯的代码刺激集（Controlled Stimuli），结合可解释性工具 <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024)，去解剖 Qwen2.5-Coder 内部的处理时序。我们对该方法进行了深度适配与改造，用它照亮了代码推断场景下一个让人意外的现象：</p>
 
 <ul>
     <li>对于某些代码任务，正确的语义会非常早地出现，但极度不稳定，最终极容易被模型自己损毁（我们称之为 <em>Overthinking</em>）。</li>
@@ -259,6 +259,8 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 <p>这种现象在不同的任务上极度不均匀分布。对于前文提到的 Conditional（控制流）任务，它的内部表征就极其稳定：只要在中间某层“想清楚”了，它就会一路平滑地保持正确直到最后一层输出。</p>
 
 <p>换句话说，在代码场景里，<strong>“会不会做”和“最终会不会说对”，完全是两回事。</strong></p>
+
+<p><strong>你的大模型不是不够聪明没有算清代码。它曾经掌握了答案，只不过一不小心，在到达最终层前忘了告诉你。</strong></p>
 
 <h2>四、Information Brewing：它知道，只是没准备好告诉你</h2>
 
@@ -369,11 +371,11 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
     </div>
 </div>
 
-<p>What exactly happens <em>inside</em> a Code LLM when it reads a piece of code?</p>
+<p>Today, Code Agents are increasingly capable of acting as autonomous software engineers—resolving complex issues, writing tests, and refactoring systems within real-world codebases. Yet, peel back this grandiose facade, and the bedrock of their performance relies strictly on a few atomic code deduction capabilities. But what exactly happens <em>inside</em> these models when they process such code?</p>
 
 <p>Typically, we only see the final output—right or wrong—which masks a fascinating possibility: <strong>often, the model actually knows the answer. It computes the correct result in its early layers but actively overwrites it before reaching the final token layer.</strong></p>
 
-<p>In this post, we apply controlled code understanding stimuli alongside the interpretability probing tool <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024) to dissect the layer-by-layer processing timelines within Qwen2.5-Coder. We did not invent a new method here; rather, we adapted an existing probe to illuminate a surprising phenomenon in a very practical setting:</p>
+<p>In this post, we apply controlled code understanding stimuli alongside the interpretability probing tool <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024) to dissect the layer-by-layer processing timelines within Qwen2.5-Coder. We heavily adapted and modified this probe to illuminate a surprising phenomenon in a very practical setting:</p>
 
 <ul>
     <li>For certain coding tasks, semantic truth emerges extremely early but is behaviorally unstable, getting destroyed by the model's ongoing processing (a phenomenon we term <em>Overthinking</em>).</li>
@@ -495,6 +497,14 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 </table>
 
 <p>This is the keystone claim: <strong>Benefit yields are aggressively Task-Aware.</strong> Adopting a singular overarching blanket truncation metric ruins overall stability. Effective future Agents must dynamically read operational contexts—allowing deep deductions to sail toward completion smoothly while violently interrupting numerical data-tracing evaluations where their answers peak brightest within internal processing architectures before they succumb to self-imposed forgetfulness.</p>
+
+<h2>Appendix: Methodological Adaptations to Patchscopes</h2>
+<p>Patchscopes was originally designed for factual extraction (e.g., token identity and entity attributes) in natural language. Migrating it to multi-step code execution tracking revealed severe incompatibilities, leading to three crucial modifications:</p>
+<ol>
+    <li><strong>Last-Position Injection is Mandatory</strong>: While earlier interpretability methods (like <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023's Tuned Lens</a>) advocated for injection at arbitrary mid-prompt tokens, doing so in auto-regressive code generation completely corrupts subsequent KV caches. If <span style="font-family:serif;">h<sub>&ell;</sub></span> is injected at <code>x_pos</code>, subsequent tokens (like <code>&rarr;</code> or <code>=</code>) fall out of sync, driving accuracy roughly to 0. Injecting strictly at the last position bypasses context contamination.</li>
+    <li><strong>First-Token Pruning on Giants</strong>: Surprisingly, the 14B model initially exhibited higher instability on simple <code>Copying</code> tasks than on computing tasks. Investigation revealed that the massive generation momentum of larger models caused them to hallucinate immense continuous code blocks instead of answering the target. Forcing strict first-token cropping and evaluation was required to restore the legitimate data patterns.</li>
+    <li><strong>Task-Dependent Decoding Bounds</strong>: Patchscopes' decoding capability is inherently limited. In dense computing tasks, even when linear Probing validated that the outcome already existed in the hidden dimension (100% separable), Patchscopes delayed successfully articulating that answer by dozens of layers. This confirms that <strong>computing the information</strong> and <strong>aligning the information for token emission</strong> are wholly disjointed circuits within LLMs.</li>
+</ol>
 
 <h2>Citation</h2>
 <p>Cited as:</p>
