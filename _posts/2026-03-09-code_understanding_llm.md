@@ -4,7 +4,7 @@ title: "Your LLM Understood the Code — Then Forgot the Answer"
 date: 2026-03-09
 permalink: /blog/code_understanding_llm/
 categories: [Research, Interpretability, Code]
-excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reveals dynamic differences in internal processing of Code LLMs."
+excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-layer, revealing a counterintuitive phenomenon: models often compute the right answer mid-forward-pass, then actively overwrite it."
 ---
 
 <style>
@@ -45,7 +45,6 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     text-decoration: none;
 }
 
-/* Headings */
 .post-container h2 {
     font-size: 1.6em;
     font-weight: 600;
@@ -68,13 +67,11 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     margin-bottom: 1.2rem;
 }
 
-/* Emphasized terms */
 .post-container em {
     color: #000;
     font-weight: 500;
 }
 
-/* Inline Code */
 .post-container code {
     background-color: rgba(27,31,35,0.05);
     border-radius: 3px;
@@ -85,7 +82,6 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     color: #d73a49;
 }
 
-/* Tables */
 .academic-table {
     width: 100%;
     margin: 2rem 0;
@@ -103,7 +99,6 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     color: #24292e;
 }
 
-/* Figure Placeholder */
 .figure-container {
     margin: 2.5rem 0;
     text-align: center;
@@ -136,7 +131,6 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     padding-left: 1rem;
 }
 
-/* Blockquotes */
 .post-container blockquote {
     padding: 0 1em;
     color: #6a737d;
@@ -144,7 +138,6 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     margin: 1.5rem 0;
 }
 
-/* Bilingual Toggle */
 .lang-toggle {
     display: flex;
     justify-content: flex-end;
@@ -167,7 +160,6 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     border-color: #0366d6;
 }
 
-/* Lists */
 .post-container ul, .post-container ol {
     margin-bottom: 1.2rem;
     padding-left: 2em;
@@ -176,7 +168,6 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     margin-bottom: 0.25em;
 }
 
-/* Highlighted numbers */
 .highlight-num {
     color: #d73a49;
     font-weight: 600;
@@ -198,163 +189,62 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
 <div class="lang-zh lang-content">
 
 <div class="post-header">
-    <h1 class="post-title">Your LLM Understood the Code — Then Forgot the Answer</h1>
+    <h1 class="post-title">你的模型看懂了代码，但却在最后忘了答案</h1>
     <div class="post-meta">
         By <strong>Yifu Guo</strong> and <strong>Siyue Chen</strong> &middot; March 2026
     </div>
 </div>
 
-<p>代码大模型在 SWE-bench 风格的评测上每隔几个月就会刷新记录，但我们对这些模型 <em>内部是如何处理代码</em> 的了解，依然非常有限。最终准确率告诉我们模型会不会，但并不告诉我们模型 <em>怎么</em> 会——或者更重要的，<em>为什么不会</em>。</p>
+<p>代码大模型在处理代码时，内部究竟发生了什么？</p>
 
-<p>本文记录了一系列基于 Patchscopes 的逐层可解释性实验。我们发现：对于代码 LLM 来说，不同类型的代码任务不只是“难度不同”，而是激活了截然不同的内部处理模式——拥有完全不同的信息成熟时序、稳定性签名和编码格式。</p>
+<p>我们通常只能看到最终输出对或者错，但这掩盖了一个有趣的可能性：<strong>很多时候模型其实会做，它已经在最初的几层网络里算出了正确答案，但却在随后的计算中自己把它覆盖掉了。</strong></p>
 
-<p>最惊人的发现之一：在某些任务上，模型曾经在中间层“算对了”，却在后续层将正确答案主动覆盖，最终输出错误。</p>
+<p>在这篇博客中，我们用一组简单的受控代码实验，结合可解释性工具 <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024)，去解剖 Qwen2.5-Coder 内部的处理时序。我们并没有发明新机制，只是在这个特殊的场景里用最干净的探针，照亮了一个让人有些意外的现象：</p>
 
-<h2>一、一个让人不安的对比</h2>
-
-<p>把 <strong>Qwen2.5-Coder 7B</strong> 放在两类等难度任务上：</p>
-
-<table class="academic-table">
-    <thead>
-        <tr>
-            <th>任务</th>
-            <th>最终准确率</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Conditional（控制流：if/else 条件判断）</td>
-            <td><span class="highlight-success">81.7%</span></td>
-        </tr>
-        <tr>
-            <td>Computing（数据流：变量追踪 + 算术运算）</td>
-            <td><span class="highlight-num">18.6%</span></td>
-        </tr>
-    </tbody>
-</table>
-
-<p>差距高达 63 个百分点。这不是因为这两组题目难度不同——我们后面会通过 <em>Difficulty-Matched</em> 实验证明，即使在赋值链难度相同的情况下，Computing 格式依然更差。</p>
-
-<p>这个差距在 Code Agent 的实际场景里不是抽象的。当一个 agent 在 resolve issue 时，它反复在做两件事：<strong>追踪数据流</strong>（这个变量链式赋值之后是什么值？）和<strong>推理控制流</strong>（这个条件成立，代码走哪条分支？）。如果模型处理这两类操作的内部机制完全不同，agent 的失败模式就会有很强的 <em>task-specificity</em>，而不是随机分布。</p>
-
-<h2>二、任务设计</h2>
-
-<p>我们设计了五类可控的代码理解题目，作为 interpretability 实验的 <em>controlled stimuli</em>：</p>
-
-<p><strong>数据流组：</strong></p>
 <ul>
-    <li><code>Copying</code>：纯链式变量赋值追踪（例：<code>u = 7; t = u; d = t</code>，问 <code>d</code> 的值）</li>
-    <li><code>Computing</code>：链式赋值 + 基本算术（例：<code>a = 2; b = a + 1; c = b + 2</code>，问 <code>c</code> 的值）</li>
+    <li>对于某些代码任务，正确的语义会非常早地出现，但极度不稳定，最终极容易被模型自己损毁（我们称之为 <em>Overthinking</em>）。</li>
+    <li>“模型内部知道”和“模型能说出来”是两回事。</li>
+    <li>这直接暗示了现有 <em>Early Exit</em> 方法在一个真实的 Agent 场景中蕴含着极大的潜能，前提是我们得知道模型正在执行什么类型的任务。</li>
 </ul>
 
-<p><strong>控制流组：</strong></p>
-<ul>
-    <li><code>Conditional</code>：if/else 条件判断（执行哪条分支后变量的值？）</li>
-    <li><code>Loop</code>：带循环的变量追踪（迭代 n 次后的结果）</li>
-    <li><code>Short-circuit</code>：短路求值（<code>and</code>/<code>or</code> 的惰性求值结果）</li>
-</ul>
+<p>代码理解任务其实是观察 LLM 推理不稳定性（Reasoning Instability）的一个绝佳窗口：因为相比起模糊的自然语言，代码运行具有完全确定性的中间状态语义，这使得我们可以获得非常干净的 <em>ground truth</em> 信号。</p>
 
-<p>这些题目是程序生成的，答案由 Python 解释器计算保证 ground truth 确定性，且均约束为单数字答案（0-9），以获得干净的 Patchscopes 信号。实验覆盖 <strong>Qwen2.5-Coder 0.5B / 1.5B / 3B / 7B / 14B</strong> 五个规模。</p>
+<h2>一、一个反直觉的对比：数据流 vs 控制流</h2>
 
-<h2>三、Patchscopes：给模型做逐层 MRI</h2>
-
-<p>本文的核心方法是 <strong>Patchscopes</strong> (Ghandeharioun et al., 2024)，一种通过将模型中间层的 hidden state 注入到另一个 target prompt 来探测该层信息的工具。</p>
-
-<p>具体配置：</p>
-<ul>
-    <li><strong>Source</strong>：代码题目的 prompt，提取最后 token 位置的 <span style="font-family:serif;">h<sub>&ell;</sub></span>（第 <span style="font-family:serif;">&ell;</span> 层 hidden state）</li>
-    <li><strong>Target</strong>：<code>"# The value of x is \""</code> — 一个标准化的解码 prompt</li>
-    <li><strong>注入位置</strong>：Target prompt 的 <strong>last position</strong></li>
-    <li><strong>评估</strong>：在 target prompt forward 完成后，用 LM head 看第一个 token 是否等于正确答案</li>
-</ul>
-
-<p><strong>三个代码场景的方法论适配：</strong></p>
+<p>让这个研究起步的是我们在真实 Code Agent 场景中观察到的一个差异。当 Agent 在尝试修复一个 issue（比如 SWE-Bench）时，它底层反复在做两件事：</p>
 <ol>
-    <li><strong>必须用 last-position 注入。</strong> x-position 注入几乎完全失效，因为注入后后续 token（如 <code>&rarr;</code>）的 KV cache 仍基于原始 context 计算，产生信息污染。</li>
-    <li><strong>Patchscopes 的解码能力是 task-dependent 的。</strong> 对于高运算密度的 Computing 任务，PS 无法截获 Probing 早早就能探测到的信息，说明“存在”不等于“可解码”。</li>
-    <li><strong>大模型需要 first-token 校正。</strong> 14B 模型出现了被生成惯性带偏为长文本幻觉的问题，需依靠 first-token evaluation 修正。</li>
+    <li>追踪变量的数据流：<code>x = 2; y = x + 1</code></li>
+    <li>判断 if/else 的控制流：<code>if x > 1: return A else: return B</code></li>
 </ol>
 
+<p>这似乎都是基本的逻辑推理。但当我们把同样规模的 <strong>Qwen2.5-Coder 7B</strong> 放在这两类通过脚本生成的、复杂度极简的纯净任务上时，得到了非常割裂的结果：</p>
 
-<h2>四、主要发现：两种截然不同的处理动力学</h2>
+<ul>
+    <li><strong>Conditional（控制流判断）</strong>：最终准确率 81.7%</li>
+    <li><strong>Computing（数据流计算）</strong>：最终准确率 18.6%</li>
+</ul>
 
-<p>以 7B 模型为例，五个任务的完整数字画像如下：</p>
+<p>超过 60 个百分点的差距。而且验证实验证明，即使我们把 Computing 退化成不带加减法、纯粹的连等赋值（<code>a=b; c=a</code>），错误率依然极高。这意味着问题不在于“算术太难”，而是<strong>数据流追溯这种代码格式，在模型内部激活了一条极度脆弱的计算链路。</strong></p>
 
-<table class="academic-table">
-    <thead>
-        <tr>
-            <th>维度</th>
-            <th>Copying</th>
-            <th>Computing</th>
-            <th>Conditional</th>
-            <th>Loop</th>
-            <th>Short-circuit</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Final Acc</td>
-            <td>79%</td>
-            <td><span class="highlight-num">18.6%</span></td>
-            <td>81.7%</td>
-            <td>51.6%</td>
-            <td>85%</td>
-        </tr>
-        <tr>
-            <td>Ever Correct</td>
-            <td>100%</td>
-            <td>55.8%</td>
-            <td>90%</td>
-            <td>59.4%</td>
-            <td>95.6%</td>
-        </tr>
-        <tr>
-            <td>Overthinking Gap</td>
-            <td>21pp</td>
-            <td><span class="highlight-num">37.2pp</span></td>
-            <td>8.3pp</td>
-            <td>7.8pp</td>
-            <td>10.6pp</td>
-        </tr>
-        <tr>
-            <td>Instability</td>
-            <td>&approx;0</td>
-            <td><span class="highlight-num">0.356</span></td>
-            <td>0.22</td>
-            <td>0.03</td>
-            <td>0.04</td>
-        </tr>
-        <tr>
-            <td>曲线形态</td>
-            <td>阶跃式</td>
-            <td>闪烁式</td>
-            <td>渐进式</td>
-            <td>阶跃式</td>
-            <td>渐进式</td>
-        </tr>
-    </tbody>
-</table>
+<h2>二、把手伸进模型：寻找丢失的答案</h2>
 
-<p><em>数据流组内部的分裂最令人惊讶。</em> 两个同属“数据流”的任务，却有着完全相反的动力学特征：<code>Copying</code> 在浅层没有信号，但一旦出现就极度稳定（instability &approx; 0）；而 <code>Computing</code> 极早出现信号，但极度不稳定（instability = 0.356）。</p>
+<p>既然结果错了，那它是从一开始就不懂，还是在半路走丢的？</p>
 
-<div class="figure-container">
-    <div class="figure-box">
-        <div class="figure-icon">📊</div>
-        <div>[Placeholder: Layer-wise Accuracy Comparison]</div>
-    </div>
-    <div class="figure-caption">
-        <strong>Figure 1:</strong> Layer-wise accuracy curves for all five tasks on the 7B model. Notice the step-wise jump of Copying in the late layers versus the flickering oscillating pattern of Computing in mid-layers. Conditional rises smoothly and progressively.
-    </div>
-</div>
+<p>为了搞清楚这件事，我们利用 <a href="https://arxiv.org/abs/2401.06102">Patchscopes</a> 作为探索工具。你可以把它理解为一种高级的“读脑器”：我们提取模型在处理代码问题时第 <span style="font-family:serif;">&ell;</span> 层的 hidden state <span style="font-family:serif;">h<sub>&ell;</sub></span>，把它“嫁接”到一个标准化的提问模板（比如 <code>"# The answer is "</code>）里，然后逼迫模型直接生成结果。</p>
 
-<p><strong>这不是难度问题。</strong>在 <em>Difficulty-Matched</em> 实验中，即使将 Computing 的运算密度降为 <code>d=0</code>（仅为连等赋值），7B 的 Final Acc 也只有 29.2%。这证明代码语法格式本身，激活了更不稳定的处理链路。</p>
+<p>这里有两个值得一提的工程细节（caveats），对试图复现的人或许有用：</p>
+<ol>
+    <li><strong>你只能在 Last-position 注入</strong>：早期的可解释性工作（比如 <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023 的 Tuned Lens</a> 或部分 activation patching）提倡在特定 token 处读写。但在代码的自回归生成里，如果你在中间位置注入 <span style="font-family:serif;">h<sub>&ell;</sub></span>，后续符号的 KV cache 会完全错位，准确率直接掉到 0。</li>
+    <li><strong>大模型需要 First-Token 截断</strong>：当我们在 14B 模型上做扫描时，发现模型容易顺着 prompt 的惯性一直生成幻觉代码，如果不只统计生成的第一个 token，会得到一团乱码。</li>
+</ol>
 
+<p>当我们用这种方式把 7B 模型里每一层的“瞬时想法”打印出来时，我们看到了这篇文章最核心的 findings。</p>
 
-<h2>五、Overthinking：算对了，又忘了</h2>
+<h2>三、最让我惊讶的发现：Overthinking</h2>
 
-<p>在 Computing 任务上，<strong>7B 模型有 55.8% 的样本在某个中间层曾经输出了正确答案</strong>，但最终层只有 18.6% 正确——这意味着有 <strong>37.2pp</strong> 的正确答案在推理过程中被“想没了”。</p>
+<p>直接说结论：<strong>对于 18.6% 准确率的 Computing 任务，有高达 55.8% 的测试用例，模型曾在中间某一层给出了完全正确的答案。</strong></p>
 
-<p>在全部 25 个 (Model, Task) 组合上，我们验证了：<strong>25/25 均存在比最终层准确率更高的退出层</strong>（Binomial test p &lt; 10<sup>-7</sup>）。其中，7B 的 Computing 是同模型 Conditional 遗忘现象的 4.5 倍。控制流组整体的 gap 极小，而伴随模型尺寸扩大（如 14B），整体 overthinking 也有所收窄。</p>
+<p>这里流失了近 37 个百分点的正确率。这说明很多时候，模型不是“不会做”，它只是<strong>过度计算（Overthinking）</strong>了。它在中间网络找到了答案，但在随后的层网络里——也许是被不相关的 Attention 捕捉到的噪声干扰，也许是表征坍塌——这个正确答案被覆盖掉了。</p>
 
 <div class="figure-container">
     <div class="figure-box">
@@ -362,22 +252,24 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
         <div>[Placeholder: Overthinking Gap Heatmap]</div>
     </div>
     <div class="figure-caption">
-        <strong>Figure 2:</strong> Overthinking Gap heatmap (5 models &times; 5 tasks). Shows the exact gap between "Ever Correct" and "Final Acc", highlighting the extreme 37.2pp gap for 7B Computing.
+        <strong>Figure 1：</strong>纵坐标是 5 种不同规模的模型，横坐标是不同的代码任务类别。颜色表示 Overthinking Gap（曾经算对的概率 减去 最终正确的概率）。你可以清晰地看到 Computing 任务在 7B 模型上呈现出巨大的红色深坑。
     </div>
 </div>
 
-<h2>六、Information Brewing：知道不等于说出来</h2>
+<p>这种现象在不同的任务上极度不均匀分布。对于前文提到的 Conditional（控制流）任务，它的内部表征就极其稳定：只要在中间某层“想清楚”了，它就会一路平滑地保持正确直到最后一层输出。</p>
 
-<p>对于 Computing 极端遗忘现象的解释，离不开 <em>Information Brewing</em> 假说。我们比对了纯线性 Probing 和 Patchscopes 生成的结果：</p>
+<p>换句话说，在代码场景里，<strong>“会不会做”和“最终会不会说对”，完全是两回事。</strong></p>
 
-<p>在 14B 的 Computing 实验里：</p>
+<h2>四、Information Brewing：它知道，只是没准备好告诉你</h2>
+
+<p>那么，为什么这种遗忘只发生在算术计算（Computing）上？</p>
+
+<p>我们引入了早期线性探测器（Linear Probing，参考 <a href="https://arxiv.org/abs/1610.01644">Alain & Bengio, 2016</a>）和 Patchscopes 进行了交叉验证，发现了一个很有意思的现象：<strong>Information Brewing（信息酝酿期）</strong>。</p>
+
 <ul>
-    <li>Probing Onset：层数 2（极浅层即可用线性分类器读出确切答案）</li>
-    <li>PS 解码起飞：层数 33</li>
-    <li><strong>Gap：31 层</strong></li>
+    <li>在 14B 模型里，如果我们用一个简单的线性分类器去看，模型的 <strong>第 2 层</strong> 就已经完全知晓了 Computing 的最终答案（Probing 准确率接近 100%）。正确信息在极浅层就已经形成了良好的线性可分表示。</li>
+    <li>但如果我们用 Patchscopes 去逼迫模型“说出”答案，它一直要憋到 <strong>第 33 层</strong> 才能正确解码。</li>
 </ul>
-
-<p>信息以线性可识别的方式存在于 hidden state 中（Probing 能读出），但并不是以可以直接输出的格式编码的。模型由于需要近 30 层将“计算结果”翻译转换成“Output-ready”表征。这个孕育转换期极度脆弱，一不小心就会被后续 Attention 的噪声完全覆盖（从而 Overthinking）。而像 <code>Copying</code> 任务，其翻译的 Brewing 缝隙几乎为 0 层。</p>
 
 <div class="figure-container">
     <div class="figure-box">
@@ -385,83 +277,58 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
         <div>[Placeholder: Probing vs Patchscopes Dual Curves]</div>
     </div>
     <div class="figure-caption">
-        <strong>Figure 3:</strong> Dual curves for 14B model tracking information extractability. The massive horizontal lag (~31 layers) between Probing success and Patchscopes success illustrates the "Information Brewing" period.
+        <strong>Figure 2：</strong>14B 模型上 Probing (提前到达 100%) 和 Patchscopes (延期上升) 的准确率重叠对比。中间 31 层的长长平原，就是所谓的 Brewing 间隙。
     </div>
 </div>
 
-<h2>七、Loop 的伪循环理解</h2>
+<p>这解释了脆弱性的来源。模型在底层提取出了答案特征，但它并不是一个“可以用来生成 Token”的格式（Output-Ready）。剩下的近 30 层前向传播，模型其实是在艰难地执行某种格式转换乃至对齐。就在这漫长且艰难的转换期内，任何外在的干扰极其容易覆盖本体，导致它走到最后一步时已经面目全非。</p>
 
-<p>当分析 <code>Loop</code> 这个控制流任务时，出现了戏剧性的一幕。<code>iter=1</code> 时（只执行一次循环），四款较大参数模型给出了全对的精准响应。但一旦 <code>iter&gt;1</code>，它的准确率便发生雪崩式崩溃。</p>
+<p>这也侧面呼应了近期 Mechanistic Interpretability 里关于内部计算冗余和层间功能漂移（比如 <a href="https://arxiv.org/abs/2309.00667">DoLa: Decoding by Contrasting Layers</a>）的一些观察。</p>
 
-<p>当我们实施展开（Unrolled Loop）后，7B 在 <code>iter=3</code> 阶段骤升 70pp。结论直接呼出欲出：<strong>模型在所谓解决单次循环时，并非应用“循环推断电路”，而是借道了 <code>Copying</code> 的数据流动链路</strong>（Pattern Matching）。一旦超越了浅层的模式识别，缺乏真实迭代理解的劣势便尽现无疑。</p>
+<h2>五、一个小插曲：虚假的循环理解</h2>
 
-<h2>八、Task-Aware Early Exit：外科干预</h2>
+<p>这里还要顺手提一个很有意思的副产物。很多 Benchmarks 测试里会包含 <code>for i in range(n)</code> 的闭包或循环，当我们测试单次迭代时（<code>n=1</code>），所有模型都表现出了近 100% 的不可思议的能力。</p>
 
-<p>如果在特定的代码分析任务中，模型倾向于过度推论直到自我覆写而遗忘答案，那么能否截断推理？依靠 <strong>Best Fixed Layer Exit</strong>（验证集寻找全局极佳层停止前向传播），我们得到了这样的 7B 数据：</p>
+<p>但当我们把测例挪到 <code>n=2</code> 或 <code>n=3</code> 时，准确率雪崩。我们用语义将其打散成平铺的展开代码再去测时，7B 模型瞬间提升了 70 个百分点。</p>
+
+<p>这说明：目前的 LLM 处理单次 <code>Loop</code>，根本没有动用“循环推理”。它只是利用强大的 Pattern Matching，在这特定场景把它等价降解为了单纯的数据复制（Copying）电路。这不仅是对某些榜单“理解力”的戳破，也警告了我们在分析内部机制时：<strong>有些时候模型看起来在做高难度体操，其实它只是在地下通道里抄了条近路。</strong></p>
+
+<h2>六、我们该如何利用此现象？(The Adaptive Agent)</h2>
+
+<p>上述这些偏向诊断性质的发现，对于我们实际上帝视角构建 Code Agent 或优化推理（Inference）有什么用处呢？</p>
+
+<p>由于模型天然具有 Overthinking 的体质，一个最朴素的念头就是 <strong>Early Exit（提早退出推理）</strong>。其实 <a href="https://arxiv.org/abs/2207.07061">Schuster et al., 2022 (CALM)</a> 等早在 NLP 领域便引入并证实过 Early Exit 能省钱。</p>
+
+<p>但我们的数据提供了更为精细化的 Insight。如果我们依赖固定验证集，为不同任务设计一个 Best Fixed Layer（寻找最安全的静态退出层），在 7B 模型上的表现是：</p>
 
 <table class="academic-table">
     <thead>
         <tr>
             <th>任务</th>
-            <th>原生准确率</th>
-            <th>最佳退出层</th>
-            <th>退出后准确率</th>
-            <th>净收益</th>
+            <th>默认（最后一层）准确率</th>
+            <th>理想退出的准确率</th>
+            <th>提升</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Copying</td>
-            <td>79.0%</td>
-            <td>L23</td>
-            <td><span class="highlight-success">99.0%</span></td>
-            <td>+20.0pp</td>
-        </tr>
-        <tr>
-            <td>Computing</td>
+            <td>Computing (数据计算)</td>
             <td>18.6%</td>
-            <td>L22</td>
-            <td><span class="highlight-success">45.0%</span></td>
-            <td>+26.4pp</td>
+            <td>45.0% (@L22)</td>
+            <td><span class="highlight-success">+ 26.4 pp</span></td>
         </tr>
         <tr>
-            <td>Conditional</td>
+            <td>Conditional (逻辑条件)</td>
             <td>81.7%</td>
-            <td>L26</td>
-            <td>82.7%</td>
-            <td>+1.0pp</td>
+            <td>82.7% (@L26)</td>
+            <td>+ 1.0 pp</td>
         </tr>
     </tbody>
 </table>
 
-<p>收益最大的任务正是 overthinking 最深的灾区（数据流组）。这种 task-specificity 证明，如果不加甄别对所有代码统一启用单一停顿准则，是不理智的，只有感知了具体任务才能获取收益。</p>
+<p>这才是本文真正想传递的核心理念之一：<strong>收益是极度 Task-Aware（任务依赖）的。</strong>如果你对所有的代码逻辑一刀切地去设计 Early Exit，你会搞砸一半的稳定性。真正的可靠 Agent：在检测到在做“条件判断”时让大模型推到最后，在检测到“复杂中间数值追源”时，截取模型在黄金期里的内部决议。</p>
 
-<div class="figure-container">
-    <div class="figure-box">
-        <div class="figure-icon">📊</div>
-        <div>[Placeholder: Early-Exit Strategy Bar Chart]</div>
-    </div>
-    <div class="figure-caption">
-        <strong>Figure 4:</strong> Strategy chart of 7B model grouping Final (baseline), Best Fixed Layer, Correct-k, and Oracle setups, showing drastic improvement on Computing using Best Fixed.
-    </div>
-</div>
-
-<h2>九、对 Code Agent 的意义</h2>
-
-<ol>
-    <li><strong>数据计算追踪的底层脆弱性</strong>：若你设计的 Agent 屡次在一个涉及数据流极长的大项目中解题失败落榜，其实并非 context retrieval 做错了事，或是模型根本没算对。它算对了，但在随后的过度自省与繁杂的代码文本生成前被彻底涂抹了。</li>
-    <li><strong>Task-type Aware 策略</strong>：7B 对待条件控制 80%+ 而单纯追踪计算才不到 20%。当我们在 SWE-Bench 这种掺杂了各种场景的验证集里讨论“平均通过率”时，我们将不可避免地落入混淆内部机制的陷阱里。</li>
-    <li><strong>Adaptive 路由前景</strong>：在未来，借由更复杂的 Early-Exit 变体（如 <code>correct-k</code> 或探测到强内部特征分类便拦截），能够帮助大模型规避后续自发推演造成的自我推翻。</li>
-</ol>
-
-<h2>十、局限性与展望</h2>
-
-<p>本文的工作也有所局限：
-目前实验颗粒度主要驻足在 Layer-level 层级而并未深入至 Attention/MLP 独立运作的计算切片；另外也仅针对了 Qwen 家族。受控刺激实验对于上以万计的库级别项目还原度也较有限。</p>
-
-<p>但这依然带来了底层的方法论启发：当我们凝视一份高分的基准榜单时，看到的只是扁平的“结果”。在这个数字背后，是阶跃、闪烁、酝酿、以及深层生生不息又被重启乃至覆写的信息链条。</p>
-
-<p><strong>你的大模型不是不够聪明没有算清代码。它曾经掌握了答案，只不过一不小心，在到达最终层前忘了告诉你。</strong></p>
+<p>比起追求无休止的数据拟合与模型尺寸堆叠，探究大模型内部的思考折返跑（Overthinking 和 Brewing），也许能让我们用低得多的成本，拿回原本就属于它的智慧。</p>
 
 </div>
 
@@ -476,147 +343,54 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
     </div>
 </div>
 
-<p>Code LLMs shatter records on SWE-bench style leaderboards every few months, yet our understanding of <em>how</em> these models process code internally remains profoundly limited. Final accuracy indicates whether a model succeeds, but leaves us blind to the mechanisms of <em>why</em> it fails.</p>
+<p>What exactly happens <em>inside</em> a Code LLM when it reads a piece of code?</p>
 
-<p>This post details a series of layer-wise interpretability experiments using Patchscopes. We discover that across LLMs, different code tasks do not merely scale on a uniform axis of difficulty; rather, they activate completely heterogeneous processing regimes characterized by disparate information maturation timelines, stability fingerprints, and encoding formats.</p>
+<p>Typically, we only see the final output—right or wrong—which masks a fascinating possibility: <strong>often, the model actually knows the answer. It computes the correct result in its early layers but actively overwrites it before reaching the final token layer.</strong></p>
 
-<p>Perhaps most strikingly: on certain task profiles, models correctly infer the answer mid-forward-pass, only to actively overwrite and "forget" it prior to emitting tokens.</p>
+<p>In this post, we apply controlled code understanding stimuli alongside the interpretability probing tool <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024) to dissect the layer-by-layer processing timelines within Qwen2.5-Coder. We did not invent a new method here; rather, we adapted an existing probe to illuminate a surprising phenomenon in a very practical setting:</p>
 
-<h2>I. A Disquieting Gap</h2>
-
-<p>Consider <strong>Qwen2.5-Coder 7B</strong> subjected to identically-sized task scopes:</p>
-
-<table class="academic-table">
-    <thead>
-        <tr>
-            <th>Task</th>
-            <th>Final Accuracy</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Conditional (Control-flow logic reasoning)</td>
-            <td><span class="highlight-success">81.7%</span></td>
-        </tr>
-        <tr>
-            <td>Computing (Data-flow arithmetic tracking)</td>
-            <td><span class="highlight-num">18.6%</span></td>
-        </tr>
-    </tbody>
-</table>
-
-<p>This gaping chasm of 63 percentage points is not governed purely by algorithmic difficulty. As we will observe in the <em>Difficulty-Matched</em> section, ensuring structural constraints are isomorphic across test cases demonstrates that the computing syntax itself invokes a profoundly fragile cognitive loop.</p>
-
-<p>When an autonomous code agent tackles a PR, it perpetually bounces between these two axes: <strong>tracking data flows</strong> and <strong>resolving control logic</strong>. Uncovering the internal fissures between these cognitive styles allows us to systematically address task-specific failure modes rather than blindly treating the model as a black box evaluator.</p>
-
-<h2>II. Task Design</h2>
-
-<p>We craft five dimensions of controlled code understanding benchmarks mapped as <em>controlled stimuli</em> for the interpretability lens:</p>
-
-<p><strong>Data-Flow Group:</strong></p>
 <ul>
-    <li><code>Copying</code>: Chain-assignment variable tracking.</li>
-    <li><code>Computing</code>: Chain-assignments heavily injected with arithmetic.</li>
+    <li>For certain coding tasks, semantic truth emerges extremely early but is behaviorally unstable, getting destroyed by the model's ongoing processing (a phenomenon we term <em>Overthinking</em>).</li>
+    <li>"What the model internally knows" vs. "What it can articulate" are vastly different mechanisms.</li>
+    <li>This directly suggests that existing <em>Early Exit</em> strategies hold massive potential for real-world Agent scenarios—if and only if we are acutely aware of the specific task profile the model is currently executing.</li>
 </ul>
 
-<p><strong>Control-Flow Group:</strong></p>
-<ul>
-    <li><code>Conditional</code>: Standard if/else structural outcomes.</li>
-    <li><code>Loop</code>: Deterministic finite loop structures.</li>
-    <li><code>Short-circuit</code>: Lazy boolean inferences (<code>and</code>/<code>or</code> predicates).</li>
-</ul>
+<p>Code understanding turns out to be an exceptional lens for studying Reasoning Instability. Unlike the inherent fuzziness of natural language, executed code provides deterministic, verifiable semantic intermediate states, granting us incredibly clean <em>ground truth</em> signals.</p>
 
-<p>Generated strictly via abstract scripts avoiding data contamination and yielding deterministic single-digit truths (0-9), preventing generative auto-regressive decoding anomalies mapping from 0.5B to 14B model sizes.</p>
+<h2>I. A Counterintuitive Gap: Data Flow vs Control Flow</h2>
 
-<h2>III. Patchscopes Mechanics</h2>
-
-<p>We leverage <strong>Patchscopes</strong> (Ghandeharioun et al., 2024), shifting the hidden state representation <span style="font-family:serif;">h<sub>&ell;</sub></span> from the source code extraction directly onto the parsing target wrapper to explicitly read out intermediate layer convictions without meddling external probes.</p>
-
-<p>Our operational adjustments applied to Code LLMs:</p>
+<p>Our initial motivation came from observing behavior inside real-world Code Agents solving SWE-Bench-style issues. Under the hood, the agent relentlessly oscillates between two primitives:</p>
 <ol>
-    <li><strong>Last-position targeting constraint.</strong> Mid-prompt targeting causes massive KV-cache semantic decay.</li>
-    <li><strong>Task-dependent decoding limits.</strong> In intense computing tasks, the decoding process stumbles well past probing recognitions marking that "knowing" vastly pre-dates "decoding logic".</li>
-    <li><strong>First-token truncations.</strong> On larger models (viz. 14B), the intrinsic context completion capabilities yield heavy narrative hallucinations bypassing zero-shot answers, necessitating discrete token cropping boundaries.</li>
+    <li>Tracking data-flow: <code>x = 2; y = x + 1</code></li>
+    <li>Reasoning control-flow: <code>if x > 1: return A else: return B</code></li>
 </ol>
 
-<h2>IV. Polarized Dynamics Across Two Domains</h2>
+<p>When subjecting the <strong>Qwen2.5-Coder 7B</strong> parameter model to script-generated, minimalist, pure examples of these two operations, the results were severely split:</p>
 
-<p>Profiling identical behaviors on the 7B tier outlines the structural difference.</p>
+<ul>
+    <li><strong>Conditional (Control-flow bounds):</strong> 81.7% final accuracy.</li>
+    <li><strong>Computing (Data-flow arithmetic):</strong> 18.6% final accuracy.</li>
+</ul>
 
-<table class="academic-table">
-    <thead>
-        <tr>
-            <th>Dimension</th>
-            <th>Copying</th>
-            <th>Computing</th>
-            <th>Conditional</th>
-            <th>Loop</th>
-            <th>Short-circuit</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Final Acc</td>
-            <td>79%</td>
-            <td><span class="highlight-num">18.6%</span></td>
-            <td>81.7%</td>
-            <td>51.6%</td>
-            <td>85%</td>
-        </tr>
-        <tr>
-            <td>Ever Correct</td>
-            <td>100%</td>
-            <td>55.8%</td>
-            <td>90%</td>
-            <td>59.4%</td>
-            <td>95.6%</td>
-        </tr>
-        <tr>
-            <td>Overthinking Gap</td>
-            <td>21pp</td>
-            <td><span class="highlight-num">37.2pp</span></td>
-            <td>8.3pp</td>
-            <td>7.8pp</td>
-            <td>10.6pp</td>
-        </tr>
-        <tr>
-            <td>Instability</td>
-            <td>&approx;0</td>
-            <td><span class="highlight-num">0.356</span></td>
-            <td>0.22</td>
-            <td>0.03</td>
-            <td>0.04</td>
-        </tr>
-        <tr>
-            <td>Curve Shape</td>
-            <td>Stepped</td>
-            <td>Flickering</td>
-            <td>Progressive</td>
-            <td>Stepped</td>
-            <td>Progressive</td>
-        </tr>
-    </tbody>
-</table>
+<p>A staggering gap. Follow-up validation—flattening out addition and subtraction into pure sequential assignments (e.g. <code>a=b; c=a</code>)—yielded similarly abysmal metrics. The root issue isn't that "math is hard." Rather, <strong>the specific data-flow tracking formatting activates an incredibly fragile internal computational pathway.</strong></p>
 
-<p><em>The data-flow fissure commands massive attention.</em> Whilst <code>Copying</code> manifests via step-wise stability once achieving recognition (instability &approx; 0), <code>Computing</code> surges prematurely yet suffers drastic internal turbulence—a phenomena labeled internal <em>flickering</em>.</p>
+<h2>II. Poking Around with Patchscopes</h2>
 
-<div class="figure-container">
-    <div class="figure-box">
-        <div class="figure-icon">📊</div>
-        <div>[Placeholder: Layer-wise Accuracy Comparison]</div>
-    </div>
-    <div class="figure-caption">
-        <strong>Figure 1:</strong> Layer-wise accuracy traces mapped sequentially. Shows Copying jumping confidently around the 80% progression depth mark while Computing shudders intensely upon entry to mid-zones.
-    </div>
-</div>
+<p>If the final answer is wrong, did it never understand it, or did it lose it along the way?</p>
 
-<p>Applying structural controls via the <em>Difficulty-Matched</em> validation where math density drops to <code>d=0</code>, the model's accuracy settles at a mere 29.2% showing syntax alone dictates the pathway and internal chaos, regardless of complex numerical operation.</p>
+<p>We leveraged <a href="https://arxiv.org/abs/2401.06102">Patchscopes</a> to find out. Conceptually, it acts as a non-invasive mind-reader: we copy the hidden state <span style="font-family:serif;">h<sub>&ell;</sub></span> of the code evaluation from layer <span style="font-family:serif;">&ell;</span> and "patch" it into a generic prompt canvas (e.g. <code>"# The answer is "</code>), forcing the model to explicitly vocalize its mid-forward-pass assumptions.</p>
 
-<h2>V. Overthinking: Got the Answer, Scrubbed It</h2>
+<p>For those interested in exploring this space, we must highlight two massive <em>caveats</em> shaping the adaptation:</p>
+<ol>
+    <li><strong>Last-Position Execution is Non-Negotiable.</strong> Early literature (such as <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023's Tuned Lens</a>) advocated for targeted extraction/injection at arbitrary tokens. Doing so in coding loops shatters following token KV-caches, driving accuracy flat to zero due to massive context contamination.</li>
+    <li><strong>First-Token Pruning on Giants.</strong> At 14B bounds, generation momentum takes over, causing wild hallucinations spilling out endless text. If you don't aggressively crop evaluation to strictly the absolute first token emitted, you retrieve nothing but noise.</li>
+</ol>
 
-<p>At 7B scale on Computing inputs, precision hits 55.8% somewhere in the middle-tiers yet ultimately sinks to 18.6% upon finalizing generations. An overwhelming <strong>37.2 percentage points</strong> are calculated right, and actively destroyed via subsequent reasoning.</p>
+<h2>III. The Strongest Finding: Overthinking</h2>
 
-<p>Every single variation of the 25 cross grid variables validated possessed an intermediate layer vastly outshining the model's final inference generation (Binomial test p &lt; 10<sup>-7</sup>). It’s not experimental noise, it is an architectural reality. While Conditional logic logic remains solid across depths, scaling bounds up to 14B somewhat assuages the <em>forgetful phenomenon</em>.</p>
+<p>The punchline: <strong>For the Computing task suffering an 18.6% final accuracy rate, a stunning 55.8% of test subjects successfully calculated the perfect answer at some intermediate layer block.</strong></p>
+
+<p>Nearly 37 percentage points of intelligence evaporated in transit. The model didn't fail to understand; it <strong>overthought</strong>. An answer materialized deep in the network but was actively compromised throughout later evaluations—perhaps corrupted by irrelevant Attention sweeps—wholly overwriting the truth.</p>
 
 <div class="figure-container">
     <div class="figure-box">
@@ -624,21 +398,24 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
         <div>[Placeholder: Overthinking Gap Heatmap]</div>
     </div>
     <div class="figure-caption">
-        <strong>Figure 2:</strong> Visualizing the severity. 7B vs Computing burns a staggering visual delta relative to Conditional inference or 14B stability.
+        <strong>Figure 1:</strong> Depicts the 5 models scales against 5 task variables. The color spectrum defines the "Overthinking Gap" (Ever Correct % subtracted by Final Correct %). The massive pit over 7B Computing tasks flashes dark red against the stability of Conditional counterparts.
     </div>
 </div>
 
-<h2>VI. Information Brewing: Knowledge &neq; Output Readiness</h2>
+<p>Remarkably, this instability isn't universal. Under Conditional logic trials, representations harden securely. Once the answer is grasped, it sails seamlessly and stably towards final output.</p>
 
-<p>Explaining such erratic behavior requires looking at linear Probing validations versus generation. Taking the 14B computing results:</p>
+<p>In short: <strong>"Knowing the answer" and "being able to dictate the answer" utilize fractured pathways.</strong></p>
+
+<h2>IV. Information Brewing: The Output-Ready Void</h2>
+
+<p>Why does such catastrophic decay orbit Computing exclusively?</p>
+
+<p>We correlated findings applying early classical Linear Probing frameworks (inspired by <a href="https://arxiv.org/abs/1610.01644">Alain & Bengio, 2016</a>) against our Patchscopes generation bounds, uncovering what we designate as the <strong>Information Brewing Gap</strong>.</p>
 
 <ul>
-    <li>Probing onset bounds: Layer 2. Information is cleanly separable instantaneously.</li>
-    <li>PS generation alignment bounds: Layer 33.</li>
-    <li><strong>Resulting Gap: 31 Layers.</strong></li>
+    <li>Running linear approximations on our 14B models indicated that by superficial <strong>Layer 2</strong>, the core answers were already strictly determinable (Probing ~100%). Truth was perfectly intact and linearly separable.</li>
+    <li>Yet forcibly prompting the LLM via Patchscopes stalled completely, taking up until <strong>Layer 33</strong> to start correctly articulating generated completions.</li>
 </ul>
-
-<p>Information exists, but it demands severe translation sequences through deep network spaces to encode to conversational autoregressive distributions. We term this duration <em>Information Brewing</em>. When these pathways take dozens of layers to articulate the numerical insight to semantic speech, the inherent fragility is constantly at risk from subsequent attention distortions mapping, hence—forgetfulness.</p>
 
 <div class="figure-container">
     <div class="figure-box">
@@ -646,82 +423,52 @@ excerpt: "Patchscopes 揭示代码大模型内部动态差异 | Patchscopes reve
         <div>[Placeholder: Probing vs Patchscopes Dual Curves]</div>
     </div>
     <div class="figure-caption">
-        <strong>Figure 3:</strong> The sheer separation of Probing metrics detecting validity rapidly while generation thresholds suffer prolonged delays vividly maps the "Brewing" concept.
+        <strong>Figure 2:</strong> Probing peaks mapped rapidly against delayed Patchscopes decoding on 14B parameters. The 31 flatland layers bridging them outlines the harsh formatting translation reality.
     </div>
 </div>
 
-<h2>VII. Loop: The Semantic Copying Illusion</h2>
+<p>This massive translation lag defines vulnerability. The representation matures conceptually, but exists in a form heavily hostile toward auto-regressive generation execution (Non Output-Ready). For 30 subsequent layers, the model violently forces format adjustments to match token distributions—a vulnerable window where the slightest external semantic noise wipes the memory clean. This aligns closely with broader mechanistic findings detailing deep layer functional drifts (e.g., <a href="https://arxiv.org/abs/2309.00667">DoLa</a>).</p>
 
-<p>A curious edge case occurred dissecting simple <code>Loop</code> operations. At flat iterations <code>iter=1</code>, models scored heavily up toward perfect marks across all mid-to-high size networks. Stepping to <code>iter&gt;1</code> crushed returns instantly.</p>
+<h2>V. A Brief Aside: The Loop Illusion</h2>
 
-<p>Testing semantic equality operations revealed parsing circuits routed short static configurations seamlessly through logical <code>Copying</code> pattern matching paths and immediately decayed once requiring true recursive evaluation. Current language networks fundamentally bypass structural comprehension via superficial proxy semantic mapping.</p>
+<p>When measuring strict <code>Loop</code> control behaviors containing traditional <code>for i in range(n)</code> operations, all scales essentially scored perfectly at <code>n=1</code> loops.</p>
 
-<h2>VIII. Task-Aware Early Exits: Surgical Stops</h2>
+<p>Incrementing <code>n=2</code> forced total systemic breakdowns. Upon manually unspooling loops to flat linear strings for verification, scaling models snapped back to near-perfect performance. The insight is glaring: Current LLMs tackling basic iteration bypass genuine recursive loop inferences entirely. Via strong pattern recognition, they adapt single loops directly to primitive semantic <code>Copying</code> circuitry shortcuts. It warns us to remain vigilant against illusionary competence masked within Benchmarks.</p>
 
-<p>Identifying decay forces strategic interference designs. Evaluating a <strong>Best Fixed Layer Exit</strong> on the 7B parameters reveals deep potential for surgical precision halts:</p>
+<h2>VI. Utilizing Instability: Task-Aware Early Exits</h2>
+
+<p>How does diagnosing underlying instability optimize real-world autonomous coding systems?</p>
+
+<p>Since overwriting manifests broadly, stopping inference processing artificially via an <strong>Early Exit</strong> is the natural conclusion—strategies implemented historically in broader NLP parameters per <a href="https://arxiv.org/abs/2207.07061">Schuster et al. (2022)</a> to cut inference costs.</p>
+
+<p>Yet our observations stipulate refined rules. Determining the safest, statically optimal extraction layer bounded by Validation tests mapped out as such:</p>
 
 <table class="academic-table">
     <thead>
         <tr>
-            <th>Task</th>
-            <th>Native Accuracy</th>
-            <th>Optimal Exit</th>
-            <th>Post-Exit Accuracy</th>
-            <th>Net Yield</th>
+            <th>Operation</th>
+            <th>Native Default Exit</th>
+            <th>Optimal Layer Exit</th>
+            <th>Gained Return</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>Copying</td>
-            <td>79.0%</td>
-            <td>L23</td>
-            <td><span class="highlight-success">99.0%</span></td>
-            <td>+20.0pp</td>
-        </tr>
-        <tr>
             <td>Computing</td>
             <td>18.6%</td>
-            <td>L22</td>
-            <td><span class="highlight-success">45.0%</span></td>
-            <td>+26.4pp</td>
+            <td>45.0% (@L22)</td>
+            <td><span class="highlight-success">+ 26.4 pp</span></td>
         </tr>
         <tr>
             <td>Conditional</td>
             <td>81.7%</td>
-            <td>L26</td>
-            <td>82.7%</td>
-            <td>+1.0pp</td>
+            <td>82.7% (@L26)</td>
+            <td>+ 1.0 pp</td>
         </tr>
     </tbody>
 </table>
 
-<p>Halting computational tracking layers rapidly curtails destruction forces. Universal implementation, however, lacks foresight. Treating logic and arithmetic homogeneously applies heavy penalties to tasks demanding depth. This forces the demand for code evaluation engines operating strictly dynamically on <em>Task-Aware</em> principles.</p>
-
-<div class="figure-container">
-    <div class="figure-box">
-        <div class="figure-icon">📊</div>
-        <div>[Placeholder: Early-Exit Strategy Bar Chart]</div>
-    </div>
-    <div class="figure-caption">
-        <strong>Figure 4:</strong> Chart showing the net impact over multiple inference routing methodologies.
-    </div>
-</div>
-
-<h2>IX. Reflections on Code Agents</h2>
-
-<ol>
-    <li>When SWE-Bench tasks derail mid-evaluations under deep nested functions, don't just blame prompt constraints. Mathematical mapping pathways simply crumble internally beneath cascading layers.</li>
-    <li>Looking blindly at overall logic ratings paints a false picture of underlying mechanism resilience.</li>
-    <li>Adaptive routing implementations checking internal representation clustering stability mid-flight could be pivotal in creating highly reactive inference termination modules prior to over-thinking.</li>
-</ol>
-
-<h2>X. Future Limitations and Focus</h2>
-
-<p>Granular testing still orbits massive macro layer analyses leaving strict circuit-level routing uncharacterized, primarily tested on Qwen-coded dimensions exclusively. Shifting paradigms into expansive codebase mappings marks fundamental future trajectories.</p>
-
-<p>Behind flattened competitive leaderboard metrics lies a complex reality of step-functions, delayed articulations, rapid overwrites, and fading realizations mapping in the darkest networks architectures.</p>
-
-<p><strong>The model didn't miss what the code was doing, it simply calculated it—then actively buried the truth right before completion.</strong></p>
+<p>This is the keystone claim: <strong>Benefit yields are aggressively Task-Aware.</strong> Adopting a singular overarching blanket truncation metric ruins overall stability. Effective future Agents must dynamically read operational contexts—allowing deep deductions to sail toward completion smoothly while violently interrupting numerical data-tracing evaluations where their answers peak brightest within internal processing architectures before they succumb to self-imposed forgetfulness.</p>
 
 </div>
 </div>
