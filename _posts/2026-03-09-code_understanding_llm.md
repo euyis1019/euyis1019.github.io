@@ -141,28 +141,27 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 .lang-switcher {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .toggle-wrapper {
-    background: #f1f3f5;
-    border-radius: 30px;
-    padding: 4px;
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 2px;
     display: flex;
     position: relative;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
     border: 1px solid #e9ecef;
 }
 
 .toggle-label {
-    padding: 6px 18px;
-    font-size: 0.85em;
+    padding: 3px 12px;
+    font-size: 0.75em;
     font-weight: 600;
-    color: #495057;
+    color: #6c757d;
     cursor: pointer;
     z-index: 2;
     transition: color 0.3s ease;
-    border-radius: 26px;
+    border-radius: 16px;
     user-select: none;
 }
 
@@ -172,14 +171,13 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 
 .toggle-background {
     position: absolute;
-    top: 4px;
-    left: 4px;
-    width: calc(50% - 4px);
-    height: calc(100% - 8px);
-    background: #0366d6;
-    border-radius: 26px;
+    top: 2px;
+    left: 2px;
+    width: calc(50% - 2px);
+    height: calc(100% - 4px);
+    background: #333;
+    border-radius: 16px;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 10px rgba(3, 102, 214, 0.3);
     z-index: 1;
 }
 

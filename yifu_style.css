@@ -105,19 +105,15 @@ body {
 }
 
 .nav-logo {
-    font-size: 1.35rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .nav-logo:hover {
-    opacity: 0.8;
+    color: var(--accent-color);
 }
 
 .nav-menu {
