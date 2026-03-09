@@ -21,7 +21,7 @@ multilang: true
     --post-code-color: #ff3b30;
     --post-card-bg: rgba(255, 255, 255, 0.7);
     --post-glass-border: rgba(255, 255, 255, 0.5);
-    --post-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    --post-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.03);
     --post-table-th-bg: #fafafa;
     --post-em-bg: rgba(0, 113, 227, 0.05);
     --post-caption-bg: #fafafa;
@@ -29,7 +29,7 @@ multilang: true
 
 [data-theme="dark"] {
     --post-bg: #1e293b;
-    --post-text-primary: #f1f5f9;
+    --post-text-primary: #ffffff;
     --post-text-secondary: #94a3b8;
     --post-accent-color: #3b82f6;
     --post-accent-gradient: linear-gradient(135deg, #3b82f6, #60a5fa);
@@ -38,7 +38,7 @@ multilang: true
     --post-code-color: #fb7185;
     --post-card-bg: rgba(30, 41, 59, 0.7);
     --post-glass-border: rgba(255, 255, 255, 0.1);
-    --post-glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --post-glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
     --post-table-th-bg: #0f172a;
     --post-em-bg: rgba(59, 130, 246, 0.15);
     --post-caption-bg: #0f172a;
@@ -50,7 +50,7 @@ body {
 }
 
 .post-container {
-    max-width: 820px;
+    max-width: 900px;
     margin: 3rem auto;
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.8;
@@ -58,13 +58,13 @@ body {
     padding: 24px;
     background: var(--post-bg);
     border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.02);
     padding: 4rem;
     transition: all 0.3s ease;
 }
 
 [data-theme="dark"] .post-container {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.12);
 }
 
 .post-header {
@@ -238,10 +238,10 @@ body {
 }
 .figure-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(31, 38, 135, 0.1);
+    box-shadow: 0 15px 40px rgba(31, 38, 135, 0.08);
 }
 [data-theme="dark"] .figure-box:hover {
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
 }
 .figure-icon {
     font-size: 3em;
