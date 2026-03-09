@@ -9,152 +9,269 @@ multilang: true
 ---
 
 <style>
-/* Academic / Lil'Log inspired styling for the blog post */
+/* Premium Academic / Tech Blog Styling */
+:root {
+    --bg-color: #ffffff;
+    --text-primary: #1d1d1f;
+    --text-secondary: #515154;
+    --accent-color: #0071e3;
+    --accent-gradient: linear-gradient(135deg, #0071e3, #4b90ff);
+    --border-color: rgba(0, 0, 0, 0.08);
+    --code-bg: #f5f5f7;
+    --code-color: #ff3b30;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+body {
+    background-color: #fafafa;
+}
+
 .post-container {
-    max-width: 800px;
-    margin: 0 auto;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.7;
-    color: #333;
-    padding: 0 15px;
+    max-width: 820px;
+    margin: 3rem auto;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.8;
+    color: var(--text-primary);
+    padding: 0 24px;
+    background: var(--bg-color);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    padding: 4rem;
 }
 
 .post-header {
     text-align: center;
-    margin-bottom: 2.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #eaecef;
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.post-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--accent-gradient);
+    border-radius: 3px;
 }
 
 .post-title {
-    font-size: 2.2em;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
+    font-size: 2.8em;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    background: linear-gradient(90deg, #1d1d1f, #434345);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .post-meta {
-    font-size: 1.0em;
-    color: #666;
-    font-style: italic;
-    margin-top: 1rem;
+    font-size: 1.05em;
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-top: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.post-meta a {
-    color: #0366d6;
-    text-decoration: none;
+.post-meta strong {
+    color: var(--text-primary);
+    font-weight: 700;
 }
 
 .post-container h2 {
-    font-size: 1.6em;
-    font-weight: 600;
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    color: #24292e;
-    border-bottom: 1px solid #eaecef;
-    padding-bottom: 0.3em;
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-top: 3.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    position: relative;
+    padding-left: 1rem;
+}
+
+.post-container h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 80%;
+    background: var(--accent-gradient);
+    border-radius: 4px;
 }
 
 .post-container h3 {
-    font-size: 1.3em;
+    font-size: 1.4em;
     font-weight: 600;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
     margin-bottom: 1rem;
-    color: #24292e;
+    color: var(--text-primary);
 }
 
 .post-container p {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.1em;
+    color: var(--text-secondary);
 }
 
 .post-container em {
-    color: #000;
-    font-weight: 500;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-style: normal;
+    background: rgba(0, 113, 227, 0.05);
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
+.post-container strong {
+    color: var(--text-primary);
+    font-weight: 700;
 }
 
 .post-container code {
-    background-color: rgba(27,31,35,0.05);
-    border-radius: 3px;
-    font-size: 85%;
+    background-color: var(--code-bg);
+    border-radius: 6px;
+    font-size: 0.85em;
     margin: 0;
-    padding: 0.2em 0.4em;
-    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    color: #d73a49;
+    padding: 0.3em 0.5em;
+    font-family: "JetBrains Mono", SFMono-Regular, Consolas, Monaco, monospace;
+    color: var(--code-color);
+    border: 1px solid var(--border-color);
 }
 
+/* Premium Tables */
 .academic-table {
     width: 100%;
-    margin: 2rem 0;
-    border-collapse: collapse;
-    font-size: 0.95em;
+    margin: 3rem 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 1em;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
 }
 .academic-table th, .academic-table td {
-    padding: 10px 12px;
+    padding: 16px 20px;
     text-align: left;
-    border-bottom: 1px solid #e1e4e8;
+    border-bottom: 1px solid var(--border-color);
 }
 .academic-table th {
-    font-weight: 600;
-    background-color: #f6f8fa;
-    color: #24292e;
+    font-weight: 700;
+    background-color: #fafafa;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+}
+.academic-table tr:last-child td {
+    border-bottom: none;
+}
+.academic-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+.academic-table tbody tr:hover {
+    background-color: rgba(0, 113, 227, 0.02);
 }
 
+/* Glassmorphic Figures */
 .figure-container {
-    margin: 2.5rem 0;
+    margin: 3.5rem 0;
     text-align: center;
 }
 .figure-box {
     width: 100%;
-    border: 1px dashed #bbb;
-    background-color: #f6f8fa;
-    border-radius: 6px;
-    padding: 3rem 2rem;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 16px;
+    padding: 4rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #586069;
-    font-family: monospace;
+    color: var(--text-secondary);
+    font-family: "Inter", sans-serif;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+.figure-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(31, 38, 135, 0.1);
 }
 .figure-icon {
-    font-size: 2.5em;
-    margin-bottom: 1rem;
-    opacity: 0.6;
+    font-size: 3em;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
 }
 .figure-caption {
-    margin-top: 1rem;
-    font-size: 0.9em;
-    color: #586069;
-    line-height: 1.5;
+    margin-top: 1.5rem;
+    font-size: 0.95em;
+    color: var(--text-secondary);
+    line-height: 1.6;
     text-align: left;
-    border-left: 3px solid #dfe2e5;
-    padding-left: 1rem;
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1.2rem;
+    background: #fafafa;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-right: 1rem;
+    border-radius: 0 8px 8px 0;
 }
 
 .post-container blockquote {
-    padding: 0 1em;
-    color: #6a737d;
-    border-left: 0.25em solid #dfe2e5;
-    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    color: var(--text-secondary);
+    background: linear-gradient(to right, rgba(0,113,227,0.03), transparent);
+    border-left: 4px solid var(--accent-color);
+    margin: 2rem 0;
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
 }
-
 
 .post-container ul, .post-container ol {
-    margin-bottom: 1.2rem;
-    padding-left: 2em;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+    font-size: 1.1em;
 }
 .post-container li {
-    margin-bottom: 0.25em;
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+}
+.post-container li::marker {
+    color: var(--accent-color);
 }
 
 .highlight-num {
-    color: #d73a49;
-    font-weight: 600;
+    color: var(--code-color);
+    font-weight: 700;
 }
 .highlight-success {
-    color: #28a745;
-    font-weight: 600;
+    color: #34c759;
+    font-weight: 700;
+    background: rgba(52, 199, 89, 0.1);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+/* Smooth Transitions for Tab Switching */
+.lang-content {
+    animation: fadeIn 0.4s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 </style>
 
@@ -170,21 +287,21 @@ multilang: true
     </div>
 </div>
 
-<p>今天，Code Agent 已经能够作为虚拟的软件工程师，在真实世界的复杂代码库中自主解决 issue、编写测试、重构系统。但剥开这层宏大的表现，它们在底层反复调用的核心基本功，其实就是那么原子的几种代码推演能力。可是，当大模型在处理这些代码时，内部究竟发生了什么？</p>
+<p>无论是在学术评测（如 SWE-Bench）还是在工业级应用（如 Claude Code, Cursor）中，现代 Code Agent 处理复杂代码库时，其宏大表现的背后通常解构为极为底层的基本功调用：追踪变量流转的数据流，以及推导分支与循环的控制流。传统评估范式仅关注模型最终生成的 Token 是否正确，却忽略了一个更为根本的机制性提问：<strong>在这些原子推演发生时，大语言模型的内部状态呈现出怎样的时序处理动态（Processing Dynamics）？</strong></p>
 
-<p>我们通常只能看到最终输出的“成功”或“失败”，但这掩盖了一个惊人的可能性：<strong>很多时候模型其实会做，它已经在最初的几层网络里算出了正确答案，但却在随后的计算中自己把它覆盖掉了。</strong></p>
+<p>通过仅观测最终的“成功”或“失败”，我们掩盖了一个高度反直觉的表征现象：<strong>对于某些特定的代码任务，语义正确的判定在模型极浅的层级（Layer）中已经被精确计算并存在，但却在随后的自回归传递中被模型自身覆盖、损毁，导致最终输出错误。</strong></p>
 
-<p>在这篇博客中，我们用一组单纯的代码刺激集（Controlled Stimuli），结合可解释性工具 <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024)，去解剖 Qwen2.5-Coder 内部的处理时序。我们对该方法进行了深度适配与改造，用它照亮了代码推断场景下一个让人意外的现象：</p>
+<p>在这篇技术博客中，我们基于受控的代码刺激集（Controlled Stimuli），对现有可解释性分析框架 <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> 进行了底层重构与边界扩展，将其应用于 Qwen2.5-Coder 内部处理时序的解剖验证。我们揭示了不同类型的代码理解任务在网络深层激发了截然不同的 <strong>信息处理剖面（Information Processing Profiles）</strong>：</p>
 
 <ul>
-    <li>对于某些代码任务，正确的语义会非常早地出现，但极度不稳定，最终极容易被模型自己损毁（我们称之为 <em>Overthinking</em>）。</li>
-    <li>“模型内部知道”和“模型能说出来”是两回事。</li>
-    <li>这直接暗示了现有 <em>Early Exit</em> 方法在一个真实的 Agent 场景中蕴含着极大的潜能，前提是我们得知道模型正在执行什么类型的任务。</li>
+    <li>针对数据计算类流转，正确的表示会极早涌现，却呈现出灾难性的不稳定性（Instability），模型倾向于在到达末层前“遗忘”已被解码出的确切答案（我们将其量化为 <em>Overthinking</em> 现象）。</li>
+    <li>“模型内部潜藏完整可用信息（Probing 视角）”与“信息已转化为可安全输出的格式（Decoding 视角）”由彻底独立的两条机制链管辖，二者之间不仅存在语义隔离，甚至跨越巨大的层级鸿沟（如高达 31 层的 Brewing 延迟）。</li>
+    <li>本定性与定量分析直接重构了现有推理加速（Early Exit）机制在 Agentic 环境中的潜力预估——如果能感知到具体的代码理解子任务边界，我们可以安全捕获到黄金窗口期的内部决议。</li>
 </ul>
 
-<p>代码理解任务其实是观察 LLM 推理不稳定性（Reasoning Instability）的一个绝佳窗口：因为相比起模糊的自然语言，代码运行具有完全确定性的中间状态语义，这使得我们可以获得非常干净的 <em>ground truth</em> 信号。</p>
+<p>之所以选择代码理解任务，是因为其不仅对于赋能前沿 SWE 基础设施至关重要，更由于其明确的形式化执行语义，为研究 Transformer 架构内不可靠的推理传播提供了一个具备干净 <em>ground truth</em> 的绝佳观察台。</p>
 
-<h2>一、一个反直觉的对比：数据流 vs 控制流</h2>
+<h2>一、任务分离与内部动态：数据流 vs 控制流</h2>
 
 <p>让这个研究起步的是我们在真实 Code Agent 场景中观察到的一个差异。当 Agent 在尝试修复一个 issue（比如 SWE-Bench）时，它底层反复在做两件事：</p>
 <ol>
@@ -260,7 +377,7 @@ multilang: true
 
 <p>这解释了脆弱性的来源。模型在底层提取出了答案特征，但它并不是一个“可以用来生成 Token”的格式（Output-Ready）。剩下的近 30 层前向传播，模型其实是在艰难地执行某种格式转换乃至对齐。就在这漫长且艰难的转换期内，任何外在的干扰极其容易覆盖本体，导致它走到最后一步时已经面目全非。</p>
 
-<p>这也侧面呼应了近期 Mechanistic Interpretability 里关于内部计算冗余和层间功能漂移（比如 <a href="https://arxiv.org/abs/2309.00667">DoLa: Decoding by Contrasting Layers</a>）的一些观察。</p>
+<p>甚至当我们把计算难度退化到极致，测试只包含纯粹赋值传递（$d=0$）的 <code>Computing</code> 任务，且依然拥有 100% Probing 峰值的情境下，其 Patchscopes 预测仍会暴跌（如 7B 模型上出现超过 70pp 的 Overthinking 崩溃差额）。这证实了：<strong>极其脆弱的并非算术本身，而是“复杂数值溯源”这种上下文格式触发了高度不稳定的处理机制。</strong>这呼应了近期 Mechanistic Interpretability 领域里关于层间功能漂移（如 <a href="https://arxiv.org/abs/2309.00667">DoLa: Decoding by Contrasting Layers</a>）的深度观察。</p>
 
 <h2>五、一个小插曲：虚假的循环理解</h2>
 
@@ -274,17 +391,17 @@ multilang: true
 
 <p>上述这些偏向诊断性质的发现，对于我们实际上帝视角构建 Code Agent 或优化推理（Inference）有什么用处呢？</p>
 
-<p>由于模型天然具有 Overthinking 的体质，一个最朴素的念头就是 <strong>Early Exit（提早退出推理）</strong>。其实 <a href="https://arxiv.org/abs/2207.07061">Schuster et al., 2022 (CALM)</a> 等早在 NLP 领域便引入并证实过 Early Exit 能省钱。</p>
+<p>由于模型天然具有严重 Task-Specific 分布的 <em>Overthinking</em> 体质，一个随之而来的系统优化契机即是 <strong>Early Exit（推理提早断流退出）</strong>的自适应部署。尽管 <a href="https://arxiv.org/abs/2207.07061">Schuster et al., 2022 (CALM)</a> 在传统 NLP 任务中探讨过节约算力成本的价值，但我们的数据通过量化证明，强制在所有代码运算中复用同一层的剥离提取，不仅是次优的，更可能有损模型整体表现。</p>
 
-<p>但我们的数据提供了更为精细化的 Insight。如果我们依赖固定验证集，为不同任务设计一个 Best Fixed Layer（寻找最安全的静态退出层），在 7B 模型上的表现是：</p>
+<p>在 Oracle（即理论最优）测算视野下，7B 对于 <code>Computing</code> 一项所蕴藏的挽回红利可高达惊人的 <strong>+37.2pp</strong> （从 18.6% 回升至 55.8%）。即便退阶至现实可操作的、通过固定验证集标注的 <strong>最佳静态截断层（Best Fixed Layer）</strong>策略，其实验增容表现依然耀眼：</p>
 
 <table class="academic-table">
     <thead>
         <tr>
-            <th>任务</th>
-            <th>默认（最后一层）准确率</th>
-            <th>理想退出的准确率</th>
-            <th>提升</th>
+            <th>任务类别</th>
+            <th>默认基线精度 (Final Layer)</th>
+            <th>理想截断精度 (Best Fixed Exit)</th>
+            <th>恢复净值 (Gain)</th>
         </tr>
     </thead>
     <tbody>
@@ -354,21 +471,21 @@ multilang: true
     </div>
 </div>
 
-<p>Today, Code Agents are increasingly capable of acting as autonomous software engineers—resolving complex issues, writing tests, and refactoring systems within real-world codebases. Yet, peel back this grandiose facade, and the bedrock of their performance relies strictly on a few atomic code deduction capabilities. But what exactly happens <em>inside</em> these models when they process such code?</p>
+<p>Whether embedded in academic benchmarks like SWE-Bench or deployed within enterprise infrastructure via Claude Code and Cursor, modern Code Agents operate globally by breaking down tasks into atomic deduction capabilities: tracing the flow of data across variables, and reasoning over control-flow via conditions and loops. The traditional evaluation paradigm strictly monitors the correctness of the final emitted tokens, inadvertently obscuring a far more fundamental mechanistic question: <strong>What processing dynamics unfold within the hidden layers of large language models during these code executions?</strong></p>
 
-<p>Typically, we only see the final output—right or wrong—which masks a fascinating possibility: <strong>often, the model actually knows the answer. It computes the correct result in its early layers but actively overwrites it before reaching the final token layer.</strong></p>
+<p>By exclusively observing the final "success" or "failure," we mask a highly counterintuitive representational phenomenon: <strong>For certain specific coding tasks, the semantically correct answer is successfully computed and persists within extremely shallow network layers, only to be subsequently overwritten and corrupted through the autoregressive flow, resulting in an erroneous final output.</strong></p>
 
-<p>In this post, we apply controlled code understanding stimuli alongside the interpretability probing tool <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024) to dissect the layer-by-layer processing timelines within Qwen2.5-Coder. We heavily adapted and modified this probe to illuminate a surprising phenomenon in a very practical setting:</p>
+<p>In this technical blog post, we deploy controlled code understanding stimuli to reconstruct and extend the methodological boundaries of <strong><a href="https://arxiv.org/abs/2401.06102">Patchscopes</a></strong> (Ghandeharioun et al., 2024), adapting it specifically for tracing internal execution sequences within Qwen2.5-Coder. Our probe illuminates how diverse coding operations elicit vastly divergent <strong>Information Processing Profiles</strong> deep inside the network:</p>
 
 <ul>
-    <li>For certain coding tasks, semantic truth emerges extremely early but is behaviorally unstable, getting destroyed by the model's ongoing processing (a phenomenon we term <em>Overthinking</em>).</li>
-    <li>"What the model internally knows" vs. "What it can articulate" are vastly different mechanisms.</li>
-    <li>This directly suggests that existing <em>Early Exit</em> strategies hold massive potential for real-world Agent scenarios—if and only if we are acutely aware of the specific task profile the model is currently executing.</li>
+    <li>For computational data-flow tasks, correct representations emerge incredibly early but exhibit catastrophic instability; models actively "forget" exact solutions well before reaching terminal layers—a phenomenon we term <em>Overthinking</em>.</li>
+    <li>"What the latent space encodes (Probing perspective)" vs. "What the model can safely articulate formatting-wise (Decoding perspective)" are distinct mechanisms. We observe massive processing divides, including up to a 31-layer "brewing lag" required simply to translate known truth into output-ready formations.</li>
+    <li>These qualitative and quantitative findings critically advocate for re-evaluating <em>Early Exit</em> architectures in Agentic loops. By dynamically resolving the boundaries of immediate code comprehension sub-tasks, one can extract deterministic truths during prime inner-representation windows.</li>
 </ul>
 
-<p>Code understanding turns out to be an exceptional lens for studying Reasoning Instability. Unlike the inherent fuzziness of natural language, executed code provides deterministic, verifiable semantic intermediate states, granting us incredibly clean <em>ground truth</em> signals.</p>
+<p>Code reasoning serves as an unprecedented and deterministic vantage point for observing Transformer Reasoning Instability. In stark contrast to the linguistic ambiguities found in typical textual logic datasets, the strict semantic bounds of executed state traces yield incredibly explicit, robust <em>ground truth</em> signals.</p>
 
-<h2>I. A Counterintuitive Gap: Data Flow vs Control Flow</h2>
+<h2>I. A Structural Disparity: Data Flow vs. Control Flow</h2>
 
 <p>Our initial motivation came from observing behavior inside real-world Code Agents solving SWE-Bench-style issues. Under the hood, the agent relentlessly oscillates between two primitives:</p>
 <ol>
@@ -425,7 +542,7 @@ multilang: true
 
 <ul>
     <li>Running linear approximations on our 14B models indicated that by superficial <strong>Layer 2</strong>, the core answers were already strictly determinable (Probing ~100%). Truth was perfectly intact and linearly separable.</li>
-    <li>Yet forcibly prompting the LLM via Patchscopes stalled completely, taking up until <strong>Layer 33</strong> to start correctly articulating generated completions.</li>
+    <p>Yet forcibly prompting the LLM via Patchscopes stalled completely, remaining suppressed until roughly <strong>Layer 33</strong>, where it finally became capable of articulating structurally valid completions.</p>
 </ul>
 
 <div class="figure-container">
@@ -434,11 +551,11 @@ multilang: true
         <div>[Placeholder: Probing vs Patchscopes Dual Curves]</div>
     </div>
     <div class="figure-caption">
-        <strong>Figure 2:</strong> Probing peaks mapped rapidly against delayed Patchscopes decoding on 14B parameters. The 31 flatland layers bridging them outlines the harsh formatting translation reality.
+        <strong>Figure 2:</strong> Probing peaks mapped rapidly against delayed Patchscopes decoding on 14B parameters. The staggering 31-layer flatland bridging them outlines the harsh formatting translation reality, a distinct "brewing" interregnum unseen in trivial `Copying` tasks (where the gap shrinks to approximately 0pp).
     </div>
 </div>
 
-<p>This massive translation lag defines vulnerability. The representation matures conceptually, but exists in a form heavily hostile toward auto-regressive generation execution (Non Output-Ready). For 30 subsequent layers, the model violently forces format adjustments to match token distributions—a vulnerable window where the slightest external semantic noise wipes the memory clean. This aligns closely with broader mechanistic findings detailing deep layer functional drifts (e.g., <a href="https://arxiv.org/abs/2309.00667">DoLa</a>).</p>
+<p>This massive translation lag defines the model's vulnerability surface. The representation matures conceptually but exists in a state fundamentally misaligned with auto-regressive generation execution (i.e., it is Non Output-Ready). For 30 subsequent layers, the network forces violent semantic translation protocols to align with pre-trained token distributions—a deeply fragile transition period where even minor external attention sweeps easily derail and rewrite the core logic state. This provides robust empirical backing to leading mechanistic theories regarding computational iteration decay, tracking closely alongside findings surrounding deep layer functional drifts (e.g., <a href="https://arxiv.org/abs/2309.00667">DoLa</a>).</p>
 
 <h2>V. A Brief Aside: The Loop Illusion</h2>
 
@@ -450,17 +567,17 @@ multilang: true
 
 <p>How does diagnosing underlying instability optimize real-world autonomous coding systems?</p>
 
-<p>Since overwriting manifests broadly, stopping inference processing artificially via an <strong>Early Exit</strong> is the natural conclusion—strategies implemented historically in broader NLP parameters per <a href="https://arxiv.org/abs/2207.07061">Schuster et al. (2022)</a> to cut inference costs.</p>
+<p>Because representational overwriting manifests so broadly with task-specific tendencies, deliberately halting forward inference via an <strong>Early Exit</strong> is the natural conclusion. And while truncating evaluations conceptually has precedent within standard broader NLP optimization via models like CALM (<a href="https://arxiv.org/abs/2207.07061">Schuster et al., 2022</a>) specifically to curb FLOP expenditures, our targeted task profiling enforces much stricter behavioral guidelines.</p>
 
-<p>Yet our observations stipulate refined rules. Determining the safest, statically optimal extraction layer bounded by Validation tests mapped out as such:</p>
+<p>If operated underneath Oracle boundaries (i.e., optimal ideal execution), the highest ceiling for recoverable capacity manifests starkly on the 7B `Computing` stream, promising up to a <strong>+37.2pp return</strong> (spiking from baseline 18.6% to 55.8%). Utilizing realistic, validation-backed parameters via a <strong>Best Fixed Layer</strong> approach mirrors these aggressive optimizations efficiently without necessitating pre-cognitive oracle interventions:</p>
 
 <table class="academic-table">
     <thead>
         <tr>
-            <th>Operation</th>
-            <th>Native Default Exit</th>
-            <th>Optimal Layer Exit</th>
-            <th>Gained Return</th>
+            <th>Operation Paradigm</th>
+            <th>Terminal Default Rate</th>
+            <th>Optimal Static Halt (Exit)</th>
+            <th>Retrieved Capacity</th>
         </tr>
     </thead>
     <tbody>
