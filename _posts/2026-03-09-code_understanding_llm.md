@@ -330,6 +330,32 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 
 <p>比起追求无休止的数据拟合与模型尺寸堆叠，探究大模型内部的思考折返跑（Overthinking 和 Brewing），也许能让我们用低得多的成本，拿回原本就属于它的智慧。</p>
 
+<h2>引用 (Citation)</h2>
+<p>Cited as:</p>
+<blockquote>
+  <p>Guo, Yifu; Chen, Siyue. (Mar 2026). Your LLM Understood the Code — Then Forgot the Answer. Yifu Guo's Blog. https://ericguo1019.com/blog/code_understanding_llm/.</p>
+</blockquote>
+
+<p>Or</p>
+
+<pre><code>@article{guo2026codeunderstanding,
+  title   = "Your LLM Understood the Code — Then Forgot the Answer",
+  author  = "Guo, Yifu and Chen, Siyue",
+  journal = "ericguo1019.com",
+  year    = "2026",
+  month   = "Mar",
+  url     = "https://ericguo1019.com/blog/code_understanding_llm/"
+}</code></pre>
+
+<h2>参考文献 (References)</h2>
+<ol>
+    <li>Ghandeharioun, Asma, et al. <a href="https://arxiv.org/abs/2401.06102">"Patchscopes: A unifying framework for inspecting hidden representations of language models."</a> ICML (2024).</li>
+    <li>Alain, Guillaume, and Yoshua Bengio. <a href="https://arxiv.org/abs/1610.01644">"Understanding intermediate layers using linear classifier probes."</a> arXiv preprint arXiv:1610.01644 (2016).</li>
+    <li>Belrose, Nora, et al. <a href="https://arxiv.org/abs/2304.14997">"Eliciting latent predictions from transformers with the tuned lens."</a> arXiv preprint arXiv:2304.14997 (2023).</li>
+    <li>Chuang, Yung-Sung, et al. <a href="https://arxiv.org/abs/2309.00667">"DoLa: Decoding by Contrasting Layers Improves Factuality in Large Language Models."</a> ICLR (2024).</li>
+    <li>Schuster, Tal, et al. <a href="https://arxiv.org/abs/2207.07061">"Confident Adaptive Language Modeling."</a> NeurIPS (2022).</li>
+</ol>
+
 </div>
 
 
@@ -469,6 +495,32 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 </table>
 
 <p>This is the keystone claim: <strong>Benefit yields are aggressively Task-Aware.</strong> Adopting a singular overarching blanket truncation metric ruins overall stability. Effective future Agents must dynamically read operational contexts—allowing deep deductions to sail toward completion smoothly while violently interrupting numerical data-tracing evaluations where their answers peak brightest within internal processing architectures before they succumb to self-imposed forgetfulness.</p>
+
+<h2>Citation</h2>
+<p>Cited as:</p>
+<blockquote>
+  <p>Guo, Yifu; Chen, Siyue. (Mar 2026). Your LLM Understood the Code — Then Forgot the Answer. Yifu Guo's Blog. https://ericguo1019.com/blog/code_understanding_llm/.</p>
+</blockquote>
+
+<p>Or</p>
+
+<pre><code>@article{guo2026codeunderstanding,
+  title   = "Your LLM Understood the Code — Then Forgot the Answer",
+  author  = "Guo, Yifu and Chen, Siyue",
+  journal = "ericguo1019.com",
+  year    = "2026",
+  month   = "Mar",
+  url     = "https://ericguo1019.com/blog/code_understanding_llm/"
+}</code></pre>
+
+<h2>References</h2>
+<ol>
+    <li>Ghandeharioun, Asma, et al. <a href="https://arxiv.org/abs/2401.06102">"Patchscopes: A unifying framework for inspecting hidden representations of language models."</a> ICML (2024).</li>
+    <li>Alain, Guillaume, and Yoshua Bengio. <a href="https://arxiv.org/abs/1610.01644">"Understanding intermediate layers using linear classifier probes."</a> arXiv preprint arXiv:1610.01644 (2016).</li>
+    <li>Belrose, Nora, et al. <a href="https://arxiv.org/abs/2304.14997">"Eliciting latent predictions from transformers with the tuned lens."</a> arXiv preprint arXiv:2304.14997 (2023).</li>
+    <li>Chuang, Yung-Sung, et al. <a href="https://arxiv.org/abs/2309.00667">"DoLa: Decoding by Contrasting Layers Improves Factuality in Large Language Models."</a> ICLR (2024).</li>
+    <li>Schuster, Tal, et al. <a href="https://arxiv.org/abs/2207.07061">"Confident Adaptive Language Modeling."</a> NeurIPS (2022).</li>
+</ol>
 
 </div>
 </div>
