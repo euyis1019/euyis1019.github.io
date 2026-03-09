@@ -161,7 +161,7 @@ multilang: true
 <div class="post-container">
 
 <!-- ================= 中文版 ================= -->
-<div class="lang-zh lang-content">
+<div class="lang-zh lang-content" style="display:none;">
 
 <div class="post-header">
     <h1 class="post-title">你的模型看懂了代码，但却在最后忘了答案</h1>
@@ -345,7 +345,7 @@ multilang: true
 
 
 <!-- ================= 英文版 ================= -->
-<div class="lang-en lang-content" style="display:none;">
+<div class="lang-en lang-content">
 
 <div class="post-header">
     <h1 class="post-title">Your LLM Understood the Code — Then Forgot the Answer</h1>
