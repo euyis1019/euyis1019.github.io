@@ -5,6 +5,7 @@ date: 2026-03-09
 permalink: /blog/code_understanding_llm/
 categories: [Research, Interpretability, Code]
 excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-layer, revealing a counterintuitive phenomenon: models often compute the right answer mid-forward-pass, then actively overwrite it."
+multilang: true
 ---
 
 <style>
@@ -138,52 +139,6 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
     margin: 1.5rem 0;
 }
 
-.lang-switcher {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 24px;
-}
-
-.toggle-wrapper {
-    background: #f8f9fa;
-    border-radius: 20px;
-    padding: 2px;
-    display: flex;
-    position: relative;
-    border: 1px solid #e9ecef;
-}
-
-.toggle-label {
-    padding: 3px 12px;
-    font-size: 0.75em;
-    font-weight: 600;
-    color: #6c757d;
-    cursor: pointer;
-    z-index: 2;
-    transition: color 0.3s ease;
-    border-radius: 16px;
-    user-select: none;
-}
-
-.toggle-label.active {
-    color: #fff;
-}
-
-.toggle-background {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: calc(50% - 2px);
-    height: calc(100% - 4px);
-    background: #333;
-    border-radius: 16px;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1;
-}
-
-.toggle-wrapper.en-mode .toggle-background {
-    transform: translateX(100%);
-}
 
 .post-container ul, .post-container ol {
     margin-bottom: 1.2rem;
@@ -205,35 +160,15 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 
 <div class="post-container">
 
-<div class="lang-switcher">
-    <div class="toggle-wrapper" id="lang-toggle-wrapper">
-        <div class="toggle-background"></div>
-        <div class="toggle-label active" id="label-zh" onclick="switchLang('zh')">中文</div>
-        <div class="toggle-label" id="label-en" onclick="switchLang('en')">English</div>
+<!-- ================= 中文版 ================= -->
+<div class="lang-zh lang-content">
+
+<div class="post-header">
+    <h1 class="post-title">你的模型看懂了代码，但却在最后忘了答案</h1>
+    <div class="post-meta">
+        By <strong>Yifu Guo</strong> and <strong>Siyue Chen</strong> &middot; March 2026
     </div>
 </div>
-
-<script>
-    function switchLang(lang) {
-        const wrapper = document.getElementById('lang-toggle-wrapper');
-        const labelZh = document.getElementById('label-zh');
-        const labelEn = document.getElementById('label-en');
-        
-        document.querySelectorAll('.lang-content').forEach(el => el.style.display = 'none');
-        
-        if (lang === 'zh') {
-            wrapper.classList.remove('en-mode');
-            labelZh.classList.add('active');
-            labelEn.classList.remove('active');
-            document.querySelectorAll('.lang-zh').forEach(el => el.style.display = 'block');
-        } else {
-            wrapper.classList.add('en-mode');
-            labelZh.classList.remove('active');
-            labelEn.classList.add('active');
-            document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'block');
-        }
-    }
-</script>
 
 <p>今天，Code Agent 已经能够作为虚拟的软件工程师，在真实世界的复杂代码库中自主解决 issue、编写测试、重构系统。但剥开这层宏大的表现，它们在底层反复调用的核心基本功，其实就是那么原子的几种代码推演能力。可是，当大模型在处理这些代码时，内部究竟发生了什么？</p>
 

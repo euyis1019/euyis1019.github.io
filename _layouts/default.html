@@ -16,6 +16,17 @@
             <div class="nav-menu">
                 <a href="{{ '/' | relative_url }}" class="nav-link">Home</a>
                 <a href="{{ '/blog/' | relative_url }}" class="nav-link">Blog</a>
+
+                {% if page.multilang %}
+                <div class="nav-lang-switcher active">
+                    <div class="toggle-wrapper" id="lang-toggle-wrapper">
+                        <div class="toggle-background"></div>
+                        <div class="toggle-label active" id="label-zh" onclick="switchLang('zh')">ZH</div>
+                        <div class="toggle-label" id="label-en" onclick="switchLang('en')">EN</div>
+                    </div>
+                </div>
+                {% endif %}
+
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
                     <i class="fas fa-moon"></i>
                 </button>

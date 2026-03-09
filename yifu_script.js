@@ -215,21 +215,31 @@ const mobileMenuToggle = document.createElement('button');
 mobileMenuToggle.className = 'mobile-menu-toggle';
 mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
 mobileMenuToggle.style.display = 'none';
-
-const navContainer = document.querySelector('.nav-container');
-navContainer.insertBefore(mobileMenuToggle, navContainer.querySelector('.nav-menu'));
-
-// Show on mobile
-if (window.innerWidth <= 768) {
-    mobileMenuToggle.style.display = 'block';
-}
-
-mobileMenuToggle.addEventListener('click', () => {
-    const navMenu = document.querySelector('.nav-menu');
-    navMenu.classList.toggle('active');
-});
 */
 
+// ============================================
+// Language Switcher Logic
+// ============================================
+function switchLang(lang) {
+    const wrapper = document.getElementById('lang-toggle-wrapper');
+    const labelZh = document.getElementById('label-zh');
+    const labelEn = document.getElementById('label-en');
+
+    if (!wrapper) return; // Not on a multilingual page
+
+    document.querySelectorAll('.lang-content').forEach(el => el.style.display = 'none');
+
+    if (lang === 'zh') {
+        wrapper.classList.remove('en-mode');
+        labelZh.classList.add('active');
+        labelEn.classList.remove('active');
+        document.querySelectorAll('.lang-zh').forEach(el => el.style.display = 'block');
+    } else {
+        wrapper.classList.add('en-mode');
+        labelZh.classList.remove('active');
+        labelEn.classList.add('active');
+        document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'block');
+    }
+}
 console.log('🎨 Personal website loaded successfully!');
 console.log('👨‍💻 Developed by Yifu Guo');
-
