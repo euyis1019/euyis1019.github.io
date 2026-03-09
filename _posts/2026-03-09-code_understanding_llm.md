@@ -232,7 +232,7 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 
 <p>为了搞清楚这件事，我们利用 <a href="https://arxiv.org/abs/2401.06102">Patchscopes</a> 作为探索工具。你可以把它理解为一种高级的“读脑器”：我们提取模型在处理代码问题时第 <span style="font-family:serif;">&ell;</span> 层的 hidden state <span style="font-family:serif;">h<sub>&ell;</sub></span>，把它“嫁接”到一个标准化的提问模板（比如 <code>"# The answer is "</code>）里，然后逼迫模型直接生成结果。</p>
 
-<p>这里有两个值得一提的工程细节（caveats），对试图复现的人或许有用：</p>
+<p>这里有两个值得一提的工程细节（caveats），对试图复现的人或许有用（详见 <a href="#appendix-a">附录 A</a>）：</p>
 <ol>
     <li><strong>你只能在 Last-position 注入</strong>：早期的可解释性工作（比如 <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023 的 Tuned Lens</a> 或部分 activation patching）提倡在特定 token 处读写。但在代码的自回归生成里，如果你在中间位置注入 <span style="font-family:serif;">h<sub>&ell;</sub></span>，后续符号的 KV cache 会完全错位，准确率直接掉到 0。</li>
     <li><strong>大模型需要 First-Token 截断</strong>：当我们在 14B 模型上做扫描时，发现模型容易顺着 prompt 的惯性一直生成幻觉代码，如果不只统计生成的第一个 token，会得到一团乱码。</li>
@@ -358,6 +358,14 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
     <li>Schuster, Tal, et al. <a href="https://arxiv.org/abs/2207.07061">"Confident Adaptive Language Modeling."</a> NeurIPS (2022).</li>
 </ol>
 
+<h2 id="appendix-a">附录 A：Patchscopes 在代码任务中的方法论适配</h2>
+<p>Patchscopes 最初被设计用于自然语言中的事实提取（如实体属性）。将其迁移至多步代码执行追踪时，我们遇到了极其严重的不适配，并做出了以下核心改造：</p>
+<ol>
+    <li><strong>必须使用 Last-position 注入</strong>：早期的可解释性工作（如 <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023 的 Tuned Lens</a>）提倡在特定 prompt token 处读写。但在代码的自回归生成里，若你在 <code>x_pos</code> 注入 <span style="font-family:serif;">h<sub>&ell;</sub></span>，由于后续符号（如 <code>&rarr;</code> 或 <code>=</code>）的 KV cache 仍基于原始上下文计算，产生的信息污染会让准确率直接暴跌至接近 0。只有在 Last-position 注入，才能无干扰地直接进入生成阶段。</li>
+    <li><strong>大模型需要 First-Token 截断校正</strong>：我们发现 14B 参数的模型出现了 <code>Copying</code> 稳定性甚至弱于 <code>Computing</code> 的反常倒挂。排查后发现，大模型的“生成惯性”极强，超过 79.7% 的失效案例是因为模型顺着注入特征强行进行了长篇幻觉续写。强制截取生成的首个 Token 并进行校正后，预期的数据规律才得以恢复。</li>
+    <li><strong>任务依赖的解码边界</strong>：Patchscopes 的解码能力存在极强的局限性。在高运算密度的 Computing 任务中，即便 Probing 证实答案已经在线性空间内存在（100%可分），Patchscopes 仍会有超过数十层的滞后才能成功解码。这证实了：<strong>信息被计算出来</strong>，和<strong>信息转化为可随意输出的格式</strong>，在语言模型中是两条完全独立的链路。</li>
+</ol>
+
 </div>
 
 
@@ -408,7 +416,7 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 
 <p>We leveraged <a href="https://arxiv.org/abs/2401.06102">Patchscopes</a> to find out. Conceptually, it acts as a non-invasive mind-reader: we copy the hidden state <span style="font-family:serif;">h<sub>&ell;</sub></span> of the code evaluation from layer <span style="font-family:serif;">&ell;</span> and "patch" it into a generic prompt canvas (e.g. <code>"# The answer is "</code>), forcing the model to explicitly vocalize its mid-forward-pass assumptions.</p>
 
-<p>For those interested in exploring this space, we must highlight two massive <em>caveats</em> shaping the adaptation:</p>
+<p>For those interested in exploring this space, we must highlight two massive <em>caveats</em> shaping the adaptation (detailed in <a href="#appendix-a-en">Appendix A</a>):</p>
 <ol>
     <li><strong>Last-Position Execution is Non-Negotiable.</strong> Early literature (such as <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023's Tuned Lens</a>) advocated for targeted extraction/injection at arbitrary tokens. Doing so in coding loops shatters following token KV-caches, driving accuracy flat to zero due to massive context contamination.</li>
     <li><strong>First-Token Pruning on Giants.</strong> At 14B bounds, generation momentum takes over, causing wild hallucinations spilling out endless text. If you don't aggressively crop evaluation to strictly the absolute first token emitted, you retrieve nothing but noise.</li>
@@ -498,14 +506,6 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
 
 <p>This is the keystone claim: <strong>Benefit yields are aggressively Task-Aware.</strong> Adopting a singular overarching blanket truncation metric ruins overall stability. Effective future Agents must dynamically read operational contexts—allowing deep deductions to sail toward completion smoothly while violently interrupting numerical data-tracing evaluations where their answers peak brightest within internal processing architectures before they succumb to self-imposed forgetfulness.</p>
 
-<h2>Appendix: Methodological Adaptations to Patchscopes</h2>
-<p>Patchscopes was originally designed for factual extraction (e.g., token identity and entity attributes) in natural language. Migrating it to multi-step code execution tracking revealed severe incompatibilities, leading to three crucial modifications:</p>
-<ol>
-    <li><strong>Last-Position Injection is Mandatory</strong>: While earlier interpretability methods (like <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023's Tuned Lens</a>) advocated for injection at arbitrary mid-prompt tokens, doing so in auto-regressive code generation completely corrupts subsequent KV caches. If <span style="font-family:serif;">h<sub>&ell;</sub></span> is injected at <code>x_pos</code>, subsequent tokens (like <code>&rarr;</code> or <code>=</code>) fall out of sync, driving accuracy roughly to 0. Injecting strictly at the last position bypasses context contamination.</li>
-    <li><strong>First-Token Pruning on Giants</strong>: Surprisingly, the 14B model initially exhibited higher instability on simple <code>Copying</code> tasks than on computing tasks. Investigation revealed that the massive generation momentum of larger models caused them to hallucinate immense continuous code blocks instead of answering the target. Forcing strict first-token cropping and evaluation was required to restore the legitimate data patterns.</li>
-    <li><strong>Task-Dependent Decoding Bounds</strong>: Patchscopes' decoding capability is inherently limited. In dense computing tasks, even when linear Probing validated that the outcome already existed in the hidden dimension (100% separable), Patchscopes delayed successfully articulating that answer by dozens of layers. This confirms that <strong>computing the information</strong> and <strong>aligning the information for token emission</strong> are wholly disjointed circuits within LLMs.</li>
-</ol>
-
 <h2>Citation</h2>
 <p>Cited as:</p>
 <blockquote>
@@ -530,6 +530,14 @@ excerpt: "We use Patchscopes to dissect how Code LLMs process code layer-by-laye
     <li>Belrose, Nora, et al. <a href="https://arxiv.org/abs/2304.14997">"Eliciting latent predictions from transformers with the tuned lens."</a> arXiv preprint arXiv:2304.14997 (2023).</li>
     <li>Chuang, Yung-Sung, et al. <a href="https://arxiv.org/abs/2309.00667">"DoLa: Decoding by Contrasting Layers Improves Factuality in Large Language Models."</a> ICLR (2024).</li>
     <li>Schuster, Tal, et al. <a href="https://arxiv.org/abs/2207.07061">"Confident Adaptive Language Modeling."</a> NeurIPS (2022).</li>
+</ol>
+
+<h2 id="appendix-a-en">Appendix A: Methodological Adaptations to Patchscopes</h2>
+<p>Patchscopes was originally designed for factual extraction (e.g., token identity and entity attributes) in natural language. Migrating it to multi-step code execution tracking revealed severe incompatibilities, leading to three crucial modifications:</p>
+<ol>
+    <li><strong>Last-Position Injection is Mandatory</strong>: While earlier interpretability methods (like <a href="https://arxiv.org/abs/2304.14997">Belrose et al., 2023's Tuned Lens</a>) advocated for injection at arbitrary mid-prompt tokens, doing so in auto-regressive code generation completely corrupts subsequent KV caches. If <span style="font-family:serif;">h<sub>&ell;</sub></span> is injected at <code>x_pos</code>, subsequent tokens (like <code>&rarr;</code> or <code>=</code>) fall out of sync, driving accuracy roughly to 0. Injecting strictly at the last position bypasses context contamination.</li>
+    <li><strong>First-Token Pruning on Giants</strong>: Surprisingly, the 14B model initially exhibited higher instability on simple <code>Copying</code> tasks than on computing tasks. Investigation revealed that the massive generation momentum of larger models caused them to hallucinate immense continuous code blocks instead of answering the target. Forcing strict first-token cropping and evaluation was required to restore the legitimate data patterns.</li>
+    <li><strong>Task-Dependent Decoding Bounds</strong>: Patchscopes' decoding capability is inherently limited. In dense computing tasks, even when linear Probing validated that the outcome already existed in the hidden dimension (100% separable), Patchscopes delayed successfully articulating that answer by dozens of layers. This confirms that <strong>computing the information</strong> and <strong>aligning the information for token emission</strong> are wholly disjointed circuits within LLMs.</li>
 </ol>
 
 </div>
