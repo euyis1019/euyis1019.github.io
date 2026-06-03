@@ -388,6 +388,7 @@ body {
         <li>之后轨迹分化为四种<strong>决议结果（Resolution Outcomes）</strong>：Resolved、Overprocessed、Misresolved、Unresolved——四类都占据可观比例，整体 Resolved 仅 <span class="highlight-num">41.5%</span>。</li>
         <li>三组因果干预实验（激活补丁、跳层、再注入）证实这四类对应真实的内部计算状态，而不是事后贴的标签。</li>
         <li>跨 Qwen、Llama、DeepSeek 三个家族共 16 个模型（0.5B–14B），酝酿脚手架始终稳定（归一化时长 24–42%），但决议成功率随能力、规模与训练数据变化。</li>
+        <li><strong>结论</strong>：固定层数预算对约 1/4 的样本太长（Overprocessed）、对另外 1/4 太短（Unresolved）——这为 Recursive / 自适应深度 Transformer 提供了直接的实验层面 motivation，也指明了停机判据应该追踪的量：就绪性，而非置信度。</li>
     </ul>
 </div>
 
@@ -549,6 +550,19 @@ body {
 
 <p>任何单一的 early-exit 策略必然顾此失彼：帮了 Overprocessed 就伤了 Unresolved，反之亦然。这指向<strong>结果感知（outcome-aware）的推理策略</strong>——而 AUC 0.850 的无真值信号说明，运行时监测模型当前处于哪种内部状态，是一条切实可行的路径。</p>
 
+<h3>给 Recursive Transformer 的实验层面 Motivation</h3>
+
+<p>这一发现与社区当前一个热门方向直接相关：<strong>不再把 Decoder 锁死在固定层数上的架构</strong>——循环复用权重、按需迭代的 Recursive / Looped Transformer（如 LoopFormer）、按 token 动态分配深度的 Mixture-of-Depths、以及做动态深度缩放的 Inner Thinking Transformer。这类设计共同的前提假设是：<em>不同输入需要的计算深度本来就不一样</em>。我们的分类法恰好为这个假设提供了样本级的直接实验证据：</p>
+
+<ul>
+    <li><span class="badge badge-unresolved">Unresolved</span>（23.7%）证明固定层数预算对一部分输入<strong>确实太短</strong>——再注入实验能挽救其中 22–38%，说明追加计算是真实有效的，这些样本只是"没算完"；</li>
+    <li><span class="badge badge-overprocessed">Overprocessed</span>（26.4%）则证明多余的深度不只是浪费，而是<strong>主动破坏性的</strong>——继续前向传播会把已经成形的正确答案改写掉。</li>
+</ul>
+
+<blockquote>固定深度的 Transformer 强迫所有样本走完同一个层数预算；而我们的数据显示，这个预算对约四分之一的样本太长、对另外四分之一太短。最优深度的分布是异质的——这正是自由层数 budget 优于任何固定层栈的实验前提。</blockquote>
+
+<p>更进一步，这类自适应深度架构都绕不开一个核心问题：<strong>迭代到什么时候停？</strong>我们的结果给出了停机判据应该追踪的量：不是 token 级置信度，而是<strong>就绪性（readiness）</strong>——在答案变得自解码（FJC 类事件）时退出，在仍处于酝酿期时继续，并在精炼即将翻转为损毁时及时刹车。这正是 recursive / depth-adaptive 架构<em>默认存在但自己并不提供</em>的可观测层；而我们 AUC 0.850 的无真值信号系统，就是这一层的一个可行原型。</p>
+
 <p>当然也要诚实地交代边界：我们的诊断停留在层粒度，还无法定位是哪些注意力头或 MLP 子层驱动了酝酿—决议转变；基准使用短小的单原语程序，这些动态是否在组合式多语句代码中延续仍是开放问题；以及两个更深的谜：末层<em>为什么</em>会损毁正确答案？“先可得、后就绪”的顺序是残差流几何的必然，还是当前训练范式的偶然？</p>
 
 <h2>引用 (Citation)</h2>
@@ -572,6 +586,9 @@ body {
     <li>Meng, Kevin, et al. <a href="https://arxiv.org/abs/2202.05262">"Locating and editing factual associations in GPT."</a> NeurIPS (2022).</li>
     <li>Schuster, Tal, et al. <a href="https://arxiv.org/abs/2207.07061">"Confident adaptive language modeling."</a> NeurIPS (2022).</li>
     <li>Gu, Alex, et al. <a href="https://arxiv.org/abs/2401.03065">"CRUXEval: A benchmark for code reasoning, understanding and execution."</a> ICML (2024).</li>
+    <li>Raposo, David, et al. <a href="https://arxiv.org/abs/2404.02258">"Mixture-of-Depths: Dynamically allocating compute in transformer-based language models."</a> arXiv:2404.02258 (2024).</li>
+    <li>Chen, Yilong, et al. "Inner Thinking Transformer: Leveraging dynamic depth scaling to foster adaptive internal thinking." ACL (2025).</li>
+    <li>Jeddi, Ahmadreza, et al. "LoopFormer: Elastic-depth looped transformers for latent reasoning via shortcut modulation." ICLR (2026).</li>
 </ol>
 
 </div>
@@ -601,6 +618,7 @@ body {
         <li>Trajectories then diverge into four <strong>resolution outcomes</strong> — Resolved, Overprocessed, Misresolved, Unresolved — and all four carry substantial mass: overall Resolved is only <span class="highlight-num">41.5%</span>.</li>
         <li>Three causal interventions (activation patching, layer skipping, re-injection) confirm the outcomes are intervention-sensitive computational states, not post-hoc labels.</li>
         <li>Across 16 models from the Qwen, Llama, and DeepSeek families (0.5B&ndash;14B), the brewing scaffold stays stable (normalized duration 24&ndash;42%) while resolution success covaries with capability, scale, and training.</li>
+        <li><strong>Takeaway</strong>: a fixed layer budget is too long for ~a quarter of samples (Overprocessed) and too short for another quarter (Unresolved) — direct experimental motivation for recursive / depth-adaptive transformers, and a pointer to what their halting criterion should track: readiness, not confidence.</li>
     </ul>
 </div>
 
@@ -762,6 +780,19 @@ body {
 
 <p>Any single early-exit policy is therefore self-defeating: whatever helps Overprocessed hurts Unresolved, and vice versa. This motivates <strong>outcome-aware inference</strong> — and the 0.850 AUC of the GT-free signals suggests that monitoring which internal state the model currently occupies is a practical path, not a fantasy.</p>
 
+<h3>Experimental Motivation for Recursive Transformers</h3>
+
+<p>This connects directly to a direction the community is actively pursuing: <strong>architectures that refuse to lock the decoder into a fixed layer count</strong> — recursive/looped transformers that reuse weights and iterate on demand (e.g., LoopFormer), Mixture-of-Depths routing that allocates depth per token, and dynamic depth-scaling designs like the Inner Thinking Transformer. All of these share one premise: <em>different inputs need different amounts of computational depth</em>. Our taxonomy supplies sample-level experimental evidence for exactly that premise:</p>
+
+<ul>
+    <li><span class="badge badge-unresolved">Unresolved</span> (23.7%) proves the fixed layer budget is <strong>genuinely too short</strong> for some inputs — re-injection rescues 22&ndash;38% of them, so additional computation demonstrably helps: these samples simply never finished;</li>
+    <li><span class="badge badge-overprocessed">Overprocessed</span> (26.4%) proves that surplus depth is not merely wasted but <strong>actively destructive</strong> — continuing the forward pass overwrites an already-formed correct answer.</li>
+</ul>
+
+<blockquote>A fixed-depth transformer forces every sample through the same layer budget; our data show that budget is simultaneously too long for roughly a quarter of samples and too short for another quarter. The optimal depth distribution is heterogeneous — precisely the regime in which a free layer budget beats any fixed stack.</blockquote>
+
+<p>Going one step further, every adaptive-depth architecture faces the same core question: <strong>when should iteration stop?</strong> Our results identify what the halting criterion should track: not token-level confidence, but <strong>readiness</strong> — exit when the answer becomes self-decodable (an FJC-like event), keep iterating while still brewing, and brake before refinement flips into corruption. This is the observability layer that recursive and depth-adaptive architectures <em>assume but do not themselves supply</em> — and our GT-free signal system at AUC 0.850 is a working prototype of that layer.</p>
+
 <p>Honest boundaries, too: our diagnostics operate at layer granularity and cannot yet pinpoint which attention heads or MLP sublayers drive the brewing-to-resolution transition; the benchmark uses short single-primitive programs, so whether these dynamics persist in compositional multi-statement code remains open; and two deeper mysteries stand — <em>why</em> do late layers corrupt correct answers, and is availability-before-readiness a necessary consequence of residual-stream geometry or a contingent property of current training regimes?</p>
 
 <h2>Citation</h2>
@@ -785,6 +816,9 @@ body {
     <li>Meng, Kevin, et al. <a href="https://arxiv.org/abs/2202.05262">"Locating and editing factual associations in GPT."</a> NeurIPS (2022).</li>
     <li>Schuster, Tal, et al. <a href="https://arxiv.org/abs/2207.07061">"Confident adaptive language modeling."</a> NeurIPS (2022).</li>
     <li>Gu, Alex, et al. <a href="https://arxiv.org/abs/2401.03065">"CRUXEval: A benchmark for code reasoning, understanding and execution."</a> ICML (2024).</li>
+    <li>Raposo, David, et al. <a href="https://arxiv.org/abs/2404.02258">"Mixture-of-Depths: Dynamically allocating compute in transformer-based language models."</a> arXiv:2404.02258 (2024).</li>
+    <li>Chen, Yilong, et al. "Inner Thinking Transformer: Leveraging dynamic depth scaling to foster adaptive internal thinking." ACL (2025).</li>
+    <li>Jeddi, Ahmadreza, et al. "LoopFormer: Elastic-depth looped transformers for latent reasoning via shortcut modulation." ICLR (2026).</li>
 </ol>
 
 </div>
